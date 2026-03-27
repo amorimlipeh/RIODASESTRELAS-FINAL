@@ -1,43 +1,44 @@
-const express = require("express");
-const path = require("path");
-const multer = require("multer");
-const XLSX = require("xlsx");
+const express=require("express");
+const path=require("path");
+const multer=require("multer");
+const XLSX=require("xlsx");
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+const app=express();
+const PORT=process.env.PORT||3000;
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname,"public")));
 
-const upload = multer({ dest: "uploads/" });
+const upload=multer({dest:"uploads/"});
 
-let estoque = [];
+let estoque=[];
 
-// ================= IMPORTADOR =================
-app.post("/api/importar", upload.single("file"), (req,res)=>{
+// importar + aplicar
+app.post("/api/importar-aplicar",upload.single("file"),(req,res)=>{
  try{
-  const wb = XLSX.readFile(req.file.path);
-  const sheet = wb.Sheets[wb.SheetNames[0]];
-  const data = XLSX.utils.sheet_to_json(sheet);
+  const wb=XLSX.readFile(req.file.path);
+  const sheet=wb.Sheets[wb.SheetNames[0]];
+  const data=XLSX.utils.sheet_to_json(sheet);
 
-  const preview = data.slice(0,20);
+  data.forEach(r=>{
+    if(!r.codigo) return;
 
-  res.json({
-    ok:true,
-    total:data.length,
-    preview
+    estoque.push({
+      codigo:String(r.codigo),
+      quantidade:Number(r.quantidade||0),
+      endereco:"01-001-1-1"
+    });
   });
 
+  res.json({ok:true,total:data.length});
  }catch(e){
   res.json({ok:false,erro:e.message});
  }
 });
 
-// ================= STATUS =================
-app.get("/api/status",(req,res)=>{
- res.json({ok:true,msg:"importador ativo"});
+// listar
+app.get("/api/estoque",(req,res)=>{
+ res.json({ok:true,estoque});
 });
 
-app.listen(PORT,()=>{
- console.log("IMPORTADOR ATIVO "+PORT);
-});
+app.listen(PORT,()=>console.log("INTEGRADO "+PORT));

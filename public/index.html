@@ -1,31 +1,11 @@
-<!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-<title>Importador Avançado</title>
-<link rel="stylesheet" href="/css/style.css">
-</head>
 <body>
-
-<h1>IMPORTADOR AVANÇADO</h1>
+<h1>INTEGRAÇÃO FINAL</h1>
 
 <input type="file" id="file">
-<button onclick="importar()">Analisar</button>
+<button onclick="importar()">Importar + Aplicar</button>
 
-<div id="modal" class="modal hidden">
-  <div class="modal-content">
-
-    <div class="top-bar">
-      <button onclick="toggleColunas()">Selecionar Colunas</button>
-      <button onclick="aplicar()">Confirmar Importação</button>
-    </div>
-
-    <div id="colunas" class="colunas hidden"></div>
-
-    <div id="tabela"></div>
-
-  </div>
-</div>
+<div id="list"></div>
 
 <script src="/js/app.js"></script>
 </body>
