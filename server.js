@@ -1,5 +1,7 @@
 const express = require("express");
 const path = require("path");
+const multer = require("multer");
+const XLSX = require("xlsx");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -7,77 +9,35 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
+const upload = multer({ dest: "uploads/" });
+
 let estoque = [];
-let pedidos = [];
 
-function norm(e){
- e=String(e||"").replace(/\D/g,'');
- if(e.length!==7)return null;
- return `${e.slice(0,2)}-${e.slice(2,5)}-${e.slice(5,6)}-${e.slice(6,7)}`;
-}
+// ================= IMPORTADOR =================
+app.post("/api/importar", upload.single("file"), (req,res)=>{
+ try{
+  const wb = XLSX.readFile(req.file.path);
+  const sheet = wb.Sheets[wb.SheetNames[0]];
+  const data = XLSX.utils.sheet_to_json(sheet);
 
-// ================= ESTOQUE =================
-app.post("/api/estoque",(req,res)=>{
- const {codigo,endereco,quantidade}=req.body;
- const end=norm(endereco);
+  const preview = data.slice(0,20);
 
- if(!end) return res.json({ok:false,erro:"Endereco invalido"});
-
- let i=estoque.find(x=>x.codigo===codigo&&x.endereco===end);
-
- if(!i){
-  i={codigo,endereco:end,quantidade:0,reservado:0};
-  estoque.push(i);
- }
-
- i.quantidade+=Number(quantidade||0);
- res.json({ok:true});
-});
-
-// ================= PEDIDO =================
-app.post("/api/pedido",(req,res)=>{
- const p={
-  id:Date.now(),
-  itens:req.body.itens||[],
-  status:"pendente"
- };
- pedidos.push(p);
- res.json({ok:true,p});
-});
-
-// ================= PICKING =================
-app.post("/api/picking/:id",(req,res)=>{
- const p=pedidos.find(x=>x.id==req.params.id);
-
- if(!p) return res.json({ok:false});
-
- p.itens.forEach(it=>{
-  let rest=it.quantidade;
-
-  estoque.forEach(e=>{
-   let disp=e.quantidade-e.reservado;
-
-   if(e.codigo===it.codigo && rest>0){
-    let u=Math.min(disp,rest);
-    e.reservado+=u;
-    rest-=u;
-   }
+  res.json({
+    ok:true,
+    total:data.length,
+    preview
   });
 
-  it.falta=rest;
- });
-
- p.status="separando";
-
- res.json({ok:true,p});
+ }catch(e){
+  res.json({ok:false,erro:e.message});
+ }
 });
 
-// ================= TESTE =================
+// ================= STATUS =================
 app.get("/api/status",(req,res)=>{
- res.json({ok:true,msg:"rodando"});
+ res.json({ok:true,msg:"importador ativo"});
 });
 
-// 🚨 IMPORTANTE (RAILWAY)
 app.listen(PORT,()=>{
- console.log("Servidor rodando na porta "+PORT);
+ console.log("IMPORTADOR ATIVO "+PORT);
 });

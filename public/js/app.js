@@ -1,11 +1,29 @@
-async function criarPedido(){
- const itens=[{codigo:"TESTE",quantidade:5}];
+async function importar(){
+ const file = document.getElementById("file").files[0];
 
- const res=await fetch("/api/pedido",{
+ const fd = new FormData();
+ fd.append("file", file);
+
+ const res = await fetch("/api/importar",{
   method:"POST",
-  headers:{"Content-Type":"application/json"},
-  body:JSON.stringify({itens})
+  body:fd
  });
- const d=await res.json();
- document.getElementById("res").innerText="Pedido "+d.p.id;
+
+ const data = await res.json();
+
+ const el = document.getElementById("preview");
+ el.innerHTML = "";
+
+ if(!data.ok){
+  el.innerText = data.erro;
+  return;
+ }
+
+ el.innerHTML = "<b>Total:</b> "+data.total+"<br><br>";
+
+ data.preview.forEach(l=>{
+  const div = document.createElement("div");
+  div.innerText = JSON.stringify(l);
+  el.appendChild(div);
+ });
 }
