@@ -16,12 +16,7 @@ function normalizarEndereco(e){
   return `${e.slice(0,2)}-${e.slice(2,5)}-${e.slice(5,6)}-${e.slice(6,7)}`;
 }
 
-// STATUS
-app.get("/api/status",(req,res)=>{
-  res.json({ok:true});
-});
-
-// ENTRADA
+// entrada estoque
 app.post("/api/estoque/entrada",(req,res)=>{
   const {codigo,endereco,quantidade} = req.body;
   const end = normalizarEndereco(endereco);
@@ -37,29 +32,33 @@ app.post("/api/estoque/entrada",(req,res)=>{
   res.json({ok:true});
 });
 
-// GRID WMS
+// WMS COMPLETO
 app.get("/api/wms",(req,res)=>{
   const grid={};
 
-  for(let r=1;r<=3;r++){ // menor por enquanto
+  for(let r=1;r<=7;r++){
     const rua=String(r).padStart(2,"0");
     grid[rua]={};
 
-    for(let p=1;p<=10;p++){
-      const pos=String(p).padStart(3,"0");
-      const end=rua+"-"+pos+"-1-1";
+    for(let a=1;a<=7;a++){
+      grid[rua][a]={};
 
-      const item=estoque.find(e=>e.endereco===end);
+      for(let p=1;p<=50;p++){
+        const pos=String(p).padStart(3,"0");
+        const end=`${rua}-${pos}-${a}-1`;
 
-      grid[rua][pos]={
-        ocupado: !!item,
-        codigo: item?.codigo||"",
-        qtd: item?.quantidade||0
-      };
+        const item=estoque.find(e=>e.endereco===end);
+
+        grid[rua][a][pos]={
+          ocupado:!!item,
+          codigo:item?.codigo||"",
+          qtd:item?.quantidade||0
+        };
+      }
     }
   }
 
   res.json({ok:true,grid});
 });
 
-app.listen(PORT,()=>console.log("WMS BASE"));
+app.listen(PORT,()=>console.log("WMS REAL"));
