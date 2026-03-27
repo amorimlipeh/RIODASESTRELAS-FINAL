@@ -1,47 +1,69 @@
 let dados=[];
-let page=0;
-const limit=20;
+let colunasSelecionadas={};
 
 async function importar(){
- const file=document.getElementById("file").files[0];
+ const f=document.getElementById("file").files[0];
  const fd=new FormData();
- fd.append("file",file);
+ fd.append("file",f);
 
  const res=await fetch("/api/importar",{method:"POST",body:fd});
  const data=await res.json();
 
- if(!data.ok){ alert(data.erro); return; }
+ if(!data.ok){alert(data.erro);return;}
 
  dados=data.preview;
- page=0;
+ initColunas();
  abrir();
  render();
 }
 
-function abrir(){ document.getElementById("modal").classList.remove("hidden"); }
-function fechar(){ document.getElementById("modal").classList.add("hidden"); }
+function abrir(){document.getElementById("modal").classList.remove("hidden");}
+
+function initColunas(){
+ const c=Object.keys(dados[0]||{});
+ const box=document.getElementById("colunas");
+ box.innerHTML="";
+
+ c.forEach(k=>{
+  colunasSelecionadas[k]=true;
+  const label=document.createElement("label");
+  label.innerHTML=`<input type="checkbox" checked onchange="toggleCol('${k}',this)"> ${k}`;
+  box.appendChild(label);
+ });
+}
+
+function toggleCol(nome,el){
+ colunasSelecionadas[nome]=el.checked;
+ render();
+}
+
+function toggleColunas(){
+ document.getElementById("colunas").classList.toggle("hidden");
+}
 
 function render(){
- const start=page*limit;
- const slice=dados.slice(start,start+limit);
-
  let html="<table><tr>";
- if(slice.length){
-  Object.keys(slice[0]).forEach(c=> html+=`<th>${c}</th>`);
- }
+
+ const cols=Object.keys(colunasSelecionadas).filter(c=>colunasSelecionadas[c]);
+
+ cols.forEach(c=> html+=`<th draggable="true" ondragstart="drag(event)" id="${c}">${c}</th>`);
+
  html+="</tr>";
 
- slice.forEach(r=>{
+ dados.forEach(r=>{
   html+="<tr>";
-  Object.values(r).forEach(v=> html+=`<td>${v}</td>`);
+  cols.forEach(c=> html+=`<td>${r[c]||""}</td>`);
   html+="</tr>";
  });
 
  html+="</table>";
 
  document.getElementById("tabela").innerHTML=html;
- document.getElementById("page").innerText="Página "+(page+1);
 }
 
-function next(){ page++; render(); }
-function prev(){ if(page>0) page--; render(); }
+function aplicar(){
+ alert("Importação aplicada (próxima fase integra backend)");
+}
+
+let dragSrc;
+function drag(e){ dragSrc=e.target.id; }
