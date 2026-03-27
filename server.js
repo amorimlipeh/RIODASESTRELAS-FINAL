@@ -17,19 +17,19 @@ function normalizarEndereco(e){
 }
 
 // STATUS
-app.get("/api/status", (req, res) => {
-  res.json({ ok: true, sistema: "RIO DAS ESTRELAS", status: "online" });
+app.get("/api/status",(req,res)=>{
+  res.json({ok:true});
 });
 
-// ENTRADA ESTOQUE
+// ENTRADA
 app.post("/api/estoque/entrada",(req,res)=>{
   const {codigo,endereco,quantidade} = req.body;
   const end = normalizarEndereco(endereco);
-  if(!end) return res.json({ok:false,erro:"endereco invalido"});
+  if(!end) return res.json({ok:false});
 
   let item = estoque.find(i=>i.codigo===codigo && i.endereco===end);
   if(!item){
-    item = {codigo,endereco:end,quantidade:0};
+    item={codigo,endereco:end,quantidade:0};
     estoque.push(item);
   }
 
@@ -37,11 +37,29 @@ app.post("/api/estoque/entrada",(req,res)=>{
   res.json({ok:true});
 });
 
-// LISTAR ESTOQUE
-app.get("/api/estoque",(req,res)=>{
-  res.json({ok:true,estoque});
+// GRID WMS
+app.get("/api/wms",(req,res)=>{
+  const grid={};
+
+  for(let r=1;r<=3;r++){ // menor por enquanto
+    const rua=String(r).padStart(2,"0");
+    grid[rua]={};
+
+    for(let p=1;p<=10;p++){
+      const pos=String(p).padStart(3,"0");
+      const end=rua+"-"+pos+"-1-1";
+
+      const item=estoque.find(e=>e.endereco===end);
+
+      grid[rua][pos]={
+        ocupado: !!item,
+        codigo: item?.codigo||"",
+        qtd: item?.quantidade||0
+      };
+    }
+  }
+
+  res.json({ok:true,grid});
 });
 
-app.listen(PORT, () => {
-  console.log("Servidor rodando na porta " + PORT);
-});
+app.listen(PORT,()=>console.log("WMS BASE"));
