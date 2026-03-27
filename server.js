@@ -1,12 +1,14 @@
-const express=require("express");
-const path=require("path");
+const express = require("express");
+const path = require("path");
 
-const app=express();
+const app = express();
+const PORT = process.env.PORT || 3000;
+
 app.use(express.json());
-app.use(express.static(path.join(__dirname,"public")));
+app.use(express.static(path.join(__dirname, "public")));
 
-let estoque=[];
-let pedidos=[];
+let estoque = [];
+let pedidos = [];
 
 function norm(e){
  e=String(e||"").replace(/\D/g,'');
@@ -14,43 +16,68 @@ function norm(e){
  return `${e.slice(0,2)}-${e.slice(2,5)}-${e.slice(5,6)}-${e.slice(6,7)}`;
 }
 
-// estoque
+// ================= ESTOQUE =================
 app.post("/api/estoque",(req,res)=>{
  const {codigo,endereco,quantidade}=req.body;
  const end=norm(endereco);
+
+ if(!end) return res.json({ok:false,erro:"Endereco invalido"});
+
  let i=estoque.find(x=>x.codigo===codigo&&x.endereco===end);
- if(!i){i={codigo,endereco:end,quantidade:0,reservado:0};estoque.push(i);}
+
+ if(!i){
+  i={codigo,endereco:end,quantidade:0,reservado:0};
+  estoque.push(i);
+ }
+
  i.quantidade+=Number(quantidade||0);
  res.json({ok:true});
 });
 
-// pedido
+// ================= PEDIDO =================
 app.post("/api/pedido",(req,res)=>{
- const p={id:Date.now(),itens:req.body.itens||[],status:"pendente"};
+ const p={
+  id:Date.now(),
+  itens:req.body.itens||[],
+  status:"pendente"
+ };
  pedidos.push(p);
  res.json({ok:true,p});
 });
 
-// picking
+// ================= PICKING =================
 app.post("/api/picking/:id",(req,res)=>{
  const p=pedidos.find(x=>x.id==req.params.id);
- if(!p)return res.json({ok:false});
+
+ if(!p) return res.json({ok:false});
 
  p.itens.forEach(it=>{
   let rest=it.quantidade;
+
   estoque.forEach(e=>{
    let disp=e.quantidade-e.reservado;
+
    if(e.codigo===it.codigo && rest>0){
     let u=Math.min(disp,rest);
     e.reservado+=u;
     rest-=u;
    }
   });
+
   it.falta=rest;
  });
 
  p.status="separando";
+
  res.json({ok:true,p});
 });
 
-app.listen(3000);
+// ================= TESTE =================
+app.get("/api/status",(req,res)=>{
+ res.json({ok:true,msg:"rodando"});
+});
+
+// 🚨 IMPORTANTE (RAILWAY)
+app.listen(PORT,()=>{
+ console.log("Servidor rodando na porta "+PORT);
+});
