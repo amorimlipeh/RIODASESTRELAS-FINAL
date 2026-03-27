@@ -2,16 +2,38 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Importador</title>
+<title>Importador Profissional</title>
+<link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
-<h1>IMPORTADOR XLSX</h1>
+<h1>IMPORTADOR XLSX PROFISSIONAL</h1>
 
 <input type="file" id="file">
 <button onclick="importar()">Analisar</button>
 
-<div id="preview"></div>
+<div id="modal" class="modal hidden">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Pré-visualização</h2>
+      <button onclick="fechar()">X</button>
+    </div>
+
+    <div class="mapeamento">
+      <label><input type="checkbox"> Código</label>
+      <label><input type="checkbox"> Descrição</label>
+      <label><input type="checkbox"> Quantidade</label>
+    </div>
+
+    <div id="tabela"></div>
+
+    <div class="paginacao">
+      <button onclick="prev()">Voltar</button>
+      <span id="page"></span>
+      <button onclick="next()">Avançar</button>
+    </div>
+  </div>
+</div>
 
 <script src="/js/app.js"></script>
 </body>
