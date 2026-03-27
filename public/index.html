@@ -1,20 +1,54 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>RIO FINAL</title>
-<link rel="stylesheet" href="/css/style.css">
+  <meta charset="UTF-8">
+  <title>RIO DAS ESTRELAS - BASE CONSOLIDADA</title>
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+  <h1>🌟 SISTEMA LOGÍSTICO RIO DAS ESTRELAS</h1>
 
-<h1>SISTEMA FINAL</h1>
+  <section class="bloco">
+    <h2>Status</h2>
+    <button onclick="testarStatus()">Testar sistema</button>
+    <div id="status"></div>
+  </section>
 
-<input id="codigo" placeholder="Código">
-<input id="qtd" placeholder="Qtd">
-<button onclick="add()">Adicionar</button>
+  <section class="bloco">
+    <h2>Entrada de estoque</h2>
+    <input id="codigo" placeholder="Código">
+    <input id="endereco" placeholder="Endereço">
+    <input id="qtd" placeholder="Quantidade">
+    <button onclick="adicionar()">Adicionar</button>
+  </section>
 
-<div id="lista"></div>
+  <section class="bloco">
+    <h2>Importador XLSX</h2>
+    <input type="file" id="file">
+    <button onclick="importar()">Importar</button>
+    <div id="importacao"></div>
+  </section>
 
-<script src="/js/app.js"></script>
+  <section class="bloco">
+    <h2>Estoque</h2>
+    <button onclick="listar()">Atualizar estoque</button>
+    <div id="estoque"></div>
+  </section>
+
+  <section class="bloco">
+    <h2>Pedido de teste</h2>
+    <input id="pedidoCodigo" placeholder="Código do produto">
+    <input id="pedidoQtd" placeholder="Quantidade">
+    <button onclick="criarPedido()">Criar pedido</button>
+    <div id="pedidos"></div>
+  </section>
+
+  <section class="bloco">
+    <h2>Mapa WMS</h2>
+    <button onclick="carregarWms()">Atualizar mapa</button>
+    <div id="wms"></div>
+  </section>
+
+  <script src="/js/app.js"></script>
 </body>
 </html>
