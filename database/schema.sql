@@ -1,27 +1,30 @@
 
-CREATE TABLE empresas (
+CREATE TABLE IF NOT EXISTS empresas (
  id SERIAL PRIMARY KEY,
- nome TEXT
+ nome TEXT UNIQUE NOT NULL,
+ plano TEXT,
+ ativa BOOLEAN DEFAULT true
 );
 
-CREATE TABLE usuarios (
+CREATE TABLE IF NOT EXISTS usuarios (
  id SERIAL PRIMARY KEY,
- empresa_id INT,
- email TEXT,
- senha TEXT
+ empresa_id INT REFERENCES empresas(id) ON DELETE CASCADE,
+ email TEXT UNIQUE NOT NULL,
+ senha TEXT NOT NULL,
+ tipo TEXT
 );
 
-CREATE TABLE clientes (
+CREATE TABLE IF NOT EXISTS clientes (
  id SERIAL PRIMARY KEY,
- empresa_id INT,
+ empresa_id INT REFERENCES empresas(id) ON DELETE CASCADE,
  nome TEXT,
  plano TEXT,
- ativo BOOLEAN
+ ativo BOOLEAN DEFAULT true
 );
 
-CREATE TABLE pagamentos (
+CREATE TABLE IF NOT EXISTS pagamentos (
  id SERIAL PRIMARY KEY,
- cliente_id INT,
+ cliente_id INT REFERENCES clientes(id) ON DELETE CASCADE,
  valor NUMERIC,
  data TIMESTAMP
 );
