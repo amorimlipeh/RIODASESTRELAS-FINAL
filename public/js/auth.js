@@ -30,18 +30,18 @@ async function login(){
   }
 
   salvarSessao(data.token, data.usuario);
-
   setStatus("Redirecionando...");
 
-  // 🔥 AQUI É A INTEGRAÇÃO COM SEU SISTEMA REAL
   setTimeout(()=>{
-    window.location.href = "/cliente/index.html"; // ajuste se necessário
+    window.location.href = "/";
   }, 800);
 }
 
 window.onload = ()=>{
   const token = localStorage.getItem("rio_token");
-  if(token){
-    window.location.href = "/cliente/index.html";
+  const path = window.location.pathname;
+
+  if(token && path !== "/"){
+    return;
   }
-}
+};
