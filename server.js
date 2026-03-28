@@ -2,7 +2,9 @@
 const express=require("express");
 const app=express();
 app.use(express.json());
+const path = require("path");
 
+app.use(express.static(path.join(__dirname, "public")));
 let clientes=[
  {id:1,empresa:"EMPRESA_TESTE",vencimento:Date.now()+5000,status:"ativo",valor:99}
 ];
