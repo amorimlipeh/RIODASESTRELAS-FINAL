@@ -1,37 +1,9 @@
 
-body{
-  background:#071a36;
-  color:#fff;
-  font-family:Arial,sans-serif;
-  padding:20px;
-}
-.box{
-  border:1px solid #1d3c66;
-  padding:12px;
-  margin-bottom:16px;
-  background:#0b2545;
-}
-.grid2{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
-}
-input,button{
-  margin:4px;
-  padding:8px;
-}
-pre, #estoque div, #logs div, #notificacoes div, #tempoReal div, #ia div, #dashboard div{
-  margin:4px 0;
-}
-.celula{
-  display:inline-flex;
-  width:42px;
-  height:24px;
-  margin:2px;
-  align-items:center;
-  justify-content:center;
-  font-size:9px;
-}
-.vazio{ background:#444; }
-.ocupado{ background:#16a34a; }
-.reservado{ background:#eab308; color:#000; }
+body{margin:0;font-family:Arial;background:#071a36;color:#fff}
+.layout{display:flex;height:100vh}
+.sidebar{width:220px;background:#0b2545;padding:10px}
+.sidebar h2{color:#fff}
+.menu-item{padding:10px;margin:5px 0;background:#102d52;cursor:pointer}
+.menu-item:hover{background:#1d3c66}
+.content{flex:1;padding:20px}
+.card{background:#0b2545;padding:15px;margin:10px 0}
