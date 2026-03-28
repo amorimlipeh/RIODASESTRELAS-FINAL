@@ -1,5 +1,5 @@
 body{background:#071a36;color:#fff;font-family:Arial;margin:0}
 header{background:#0b2545;padding:10px;display:flex;justify-content:space-between}
 .container{padding:20px}
-input,button{margin:5px;padding:10px;border-radius:8px;border:none}
+input,select,button{margin:5px;padding:10px;border-radius:8px;border:none}
 button{background:#3b73e6;color:#fff}
