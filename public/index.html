@@ -3,30 +3,79 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>RIO BASE V2</title>
+<title>RIO SAAS DEV</title>
 <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+  <h1>PAINEL SAAS + DESENVOLVEDOR</h1>
 
-<h1>SISTEMA CONSOLIDADO V2</h1>
+  <section class="box">
+    <h2>Login</h2>
+    <input id="user" placeholder="Usuário">
+    <input id="senha" placeholder="Senha">
+    <button onclick="login()">Entrar</button>
+    <div id="loginStatus"></div>
+  </section>
 
-<h2>Login</h2>
-<input id="user"><input id="senha">
-<button onclick="login()">Entrar</button>
+  <section class="box">
+    <h2>Nova Empresa</h2>
+    <input id="empresaNome" placeholder="Nome da empresa">
+    <select id="empresaPlano">
+      <option value="teste">Teste</option>
+      <option value="basico">Básico</option>
+      <option value="profissional">Profissional</option>
+      <option value="enterprise">Enterprise</option>
+    </select>
+    <label><input type="checkbox" id="liberarTeste" checked> Liberar teste</label>
+    <button onclick="criarEmpresa()">Criar empresa</button>
+  </section>
 
-<h2>Adicionar Estoque</h2>
-<input id="codigo"><input id="qtd">
-<button onclick="add()">Add</button>
+  <section class="box">
+    <h2>Liberar Empresa para Teste</h2>
+    <input id="empresaTeste" placeholder="Empresa">
+    <input id="diasTeste" placeholder="Dias de teste" value="15">
+    <button onclick="liberarTesteEmpresa()">Liberar</button>
+  </section>
 
-<h2>Dashboard</h2>
-<div id="dash"></div>
+  <section class="box">
+    <h2>Criar Usuário</h2>
+    <input id="novoUser" placeholder="Usuário">
+    <input id="novaSenha" placeholder="Senha">
+    <input id="novaEmpresa" placeholder="Empresa">
+    <select id="novoTipo">
+      <option value="admin">Admin</option>
+      <option value="operador">Operador</option>
+      <option value="gerente">Gerente</option>
+    </select>
+    <input id="novasPermissoes" placeholder="Permissões separadas por vírgula">
+    <button onclick="criarUsuario()">Criar usuário</button>
+  </section>
 
-<h2>Tempo Real</h2>
-<div id="tempo"></div>
+  <section class="box">
+    <h2>Alterar Plano</h2>
+    <input id="planoEmpresa" placeholder="Empresa">
+    <select id="novoPlano">
+      <option value="teste">Teste</option>
+      <option value="basico">Básico</option>
+      <option value="profissional">Profissional</option>
+      <option value="enterprise">Enterprise</option>
+    </select>
+    <button onclick="alterarPlano()">Alterar</button>
+  </section>
 
-<h2>Notificações</h2>
-<div id="notif"></div>
+  <section class="box">
+    <h2>Permissões de Funções</h2>
+    <input id="permUser" placeholder="Usuário">
+    <input id="permLista" placeholder="Permissões separadas por vírgula">
+    <button onclick="alterarPermissoes()">Salvar permissões</button>
+  </section>
 
-<script src="/js/app.js"></script>
+  <section class="box">
+    <h2>Painel Desenvolvedor</h2>
+    <button onclick="carregarPainel()">Atualizar painel</button>
+    <pre id="painel"></pre>
+  </section>
+
+  <script src="/js/app.js"></script>
 </body>
 </html>
