@@ -1,23 +1,48 @@
+let pedidos=[];
+let etapa=0;
+
 function getWMS(){
  return JSON.parse(localStorage.getItem("wms")||"[]");
 }
 
-function gerarGrid(){
- const grid=document.getElementById("grid");
- let html="";
+function addPedido(){
+ const produto=document.getElementById("produto").value;
+ const qtd=document.getElementById("qtd").value;
 
- for(let i=1;i<=20;i++){
-  let endereco="05-"+String(i).padStart(3,"0")+"-1-1";
-
-  let ocupado=getWMS().find(w=>w.endereco===endereco);
-
-  html+=`<div class="cell ${ocupado?'ocupado':''}">
-  ${endereco}<br>
-  ${ocupado?ocupado.produto:''}
-  </div>`;
- }
-
- grid.innerHTML=html;
+ pedidos.push({produto,qtd});
+ renderPedido();
 }
 
-window.onload=gerarGrid;
+function renderPedido(){
+ const el=document.getElementById("pedido");
+ el.innerHTML=pedidos.map(p=>`<li>${p.produto} - ${p.qtd}</li>`).join("");
+}
+
+function iniciar(){
+ etapa=0;
+ mostrar();
+}
+
+function mostrar(){
+ const wms=getWMS();
+ const atual=pedidos[etapa];
+ if(!atual) return;
+
+ const local=wms.find(w=>w.produto===atual.produto);
+
+ document.getElementById("picking").innerHTML=`
+ Vá para: ${local?local.endereco:"N/A"}<br>
+ Retire: ${atual.produto} (${atual.qtd})
+ `;
+}
+
+function proximo(){
+ etapa++;
+ mostrar();
+}
+
+window.onload=()=>{
+ if(!localStorage.getItem("rio_token")){
+  window.location="/login";
+ }
+}
