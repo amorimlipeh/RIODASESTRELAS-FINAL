@@ -1,33 +1,21 @@
 
+<!DOCTYPE html>
 <html>
+<head>
+<meta charset="UTF-8">
+<title>WMS INTELIGENTE</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
 <body>
-<h1>COBRANÇA</h1>
 
-<input id="empresa" placeholder="empresa">
-<input id="dias" placeholder="dias">
-<button onclick="pagar()">Pagar</button>
+<h1>WMS INTELIGENTE</h1>
 
-<div id="status"></div>
+<input id="codigo" placeholder="Código">
+<input id="qtd" placeholder="Qtd">
+<button onclick="add()">Armazenar</button>
 
-<script>
-async function pagar(){
- await fetch("/api/pagar",{
-  method:"POST",
-  headers:{"Content-Type":"application/json"},
-  body:JSON.stringify({
-   empresa:empresa.value,
-   dias:dias.value
-  })
- });
- status();
-}
+<div id="list"></div>
 
-async function status(){
- const r=await fetch("/api/status/"+empresa.value);
- const d=await r.json();
- document.getElementById("status").innerText=JSON.stringify(d.empresa);
-}
-</script>
-
+<script src="/js/app.js"></script>
 </body>
 </html>

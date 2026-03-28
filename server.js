@@ -8,45 +8,42 @@ const PORT=process.env.PORT||3000;
 app.use(express.json());
 app.use(express.static(path.join(__dirname,"public")));
 
-let empresas={
- "EMPRESA_TESTE":{
-  plano:"teste",
-  vencimento:Date.now()+7*86400000,
-  ativa:true
+let estoque=[];
+let ocupacao={};
+
+// gerar endereço inteligente
+function gerarEndereco(){
+ for(let r=1;r<=5;r++){
+  for(let p=1;p<=20;p++){
+   let end=`0${r}-${String(p).padStart(3,"0")}-1-1`;
+   if(!ocupacao[end]){
+    return end;
+   }
+  }
  }
-};
+ return null;
+}
 
-// validar acesso
-app.use((req,res,next)=>{
- const emp=req.headers["x-empresa"];
- if(!emp) return next();
+// entrada com sugestão
+app.post("/api/estoque",(req,res)=>{
+ const {codigo,qtd}=req.body;
 
- const e=empresas[emp];
- if(!e) return res.json({ok:false,erro:"empresa não existe"});
+ let endereco=gerarEndereco();
 
- if(Date.now()>e.vencimento){
-  e.ativa=false;
-  return res.json({ok:false,erro:"plano vencido"});
+ if(!endereco){
+  return res.json({ok:false,erro:"Sem espaço"});
  }
 
- next();
+ ocupacao[endereco]=true;
+
+ estoque.push({codigo,qtd,endereco});
+
+ res.json({ok:true,endereco});
 });
 
-// pagar (simulado)
-app.post("/api/pagar",(req,res)=>{
- const {empresa,dias}=req.body;
- if(!empresas[empresa]) return res.json({ok:false});
-
- empresas[empresa].vencimento=Date.now()+Number(dias||30)*86400000;
- empresas[empresa].ativa=true;
-
- res.json({ok:true});
+// listar
+app.get("/api/estoque",(req,res)=>{
+ res.json({ok:true,estoque});
 });
 
-// status
-app.get("/api/status/:empresa",(req,res)=>{
- const e=empresas[req.params.empresa];
- res.json({ok:true,empresa:e});
-});
-
-app.listen(PORT,()=>console.log("COBRANÇA ATIVA"));
+app.listen(PORT,()=>console.log("WMS INTELIGENTE"));
