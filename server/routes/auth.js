@@ -62,10 +62,7 @@ router.post("/login", (req, res) => {
 });
 
 router.get("/me", requireAuth, (req, res) => {
-  res.json({
-    ok: true,
-    usuario: req.user
-  });
+  res.json({ ok: true, usuario: req.user });
 });
 
 module.exports = router;
