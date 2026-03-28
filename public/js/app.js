@@ -1,39 +1,34 @@
 
 let empresa="A";
 
+function conectar(){
+ const evt=new EventSource("/api/stream");
+ evt.onmessage=(e)=>{
+  const d=JSON.parse(e.data);
+  if(d.tipo==="estoque"){
+   document.getElementById("tempo").innerHTML+="<div>"+d.codigo+"</div>";
+  }
+  if(d.tipo==="notificacao"){
+   document.getElementById("notif").innerHTML+="<div>"+d.msg+"</div>";
+  }
+ };
+}
+
 async function login(){
- const res=await fetch("/api/login",{
-  method:"POST",
-  headers:{"Content-Type":"application/json"},
-  body:JSON.stringify({user:user.value,senha:senha.value})
- });
-
- const d=await res.json();
+ const r=await fetch("/api/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({user:user.value,senha:senha.value})});
+ const d=await r.json();
  if(!d.ok){alert("erro");return;}
-
  empresa=d.usuario.empresa;
- alert("logado "+empresa);
  load();
 }
 
 async function add(){
- await fetch("/api/estoque",{
-  method:"POST",
-  headers:{"Content-Type":"application/json"},
-  body:JSON.stringify({codigo:codigo.value,qtd:qtd.value,empresa})
- });
- load();
+ await fetch("/api/estoque",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({codigo:codigo.value,qtd:qtd.value,empresa})});
 }
 
 async function load(){
- const res=await fetch("/api/estoque/"+empresa);
- const d=await res.json();
-
- const el=document.getElementById("list");
- el.innerHTML="";
- d.estoque.forEach(i=>{
-  const div=document.createElement("div");
-  div.innerText=i.codigo+" | "+i.qtd;
-  el.appendChild(div);
- });
+ const d=await fetch("/api/dashboard").then(r=>r.json());
+ document.getElementById("dash").innerText="Produtos: "+d.totalProdutos+" | Qtd: "+d.totalQuantidade;
 }
+
+window.onload=()=>{conectar();load();}

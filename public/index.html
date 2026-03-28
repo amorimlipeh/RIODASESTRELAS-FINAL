@@ -1,19 +1,31 @@
 
+<!DOCTYPE html>
 <html>
+<head>
+<meta charset="UTF-8">
+<title>RIO BASE V2</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
 <body>
-<h1>MULTI EMPRESA</h1>
+
+<h1>SISTEMA CONSOLIDADO V2</h1>
 
 <h2>Login</h2>
-<input id="user" placeholder="user">
-<input id="senha" placeholder="senha">
+<input id="user"><input id="senha">
 <button onclick="login()">Entrar</button>
 
-<h2>Estoque</h2>
-<input id="codigo">
-<input id="qtd">
+<h2>Adicionar Estoque</h2>
+<input id="codigo"><input id="qtd">
 <button onclick="add()">Add</button>
 
-<div id="list"></div>
+<h2>Dashboard</h2>
+<div id="dash"></div>
+
+<h2>Tempo Real</h2>
+<div id="tempo"></div>
+
+<h2>Notificações</h2>
+<div id="notif"></div>
 
 <script src="/js/app.js"></script>
 </body>
