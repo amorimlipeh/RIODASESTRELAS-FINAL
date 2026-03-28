@@ -1,3 +1,4 @@
+
 require("dotenv").config();
 const express = require("express");
 
@@ -8,17 +9,10 @@ app.use(express.json());
 
 app.get("/", (req, res) => res.send("RIO V5 PROFISSIONAL"));
 
-app.use("/api/auth", require("./server/routes/auth"));
-app.use("/api/clientes", require("./server/routes/clientes"));
+// ROTAS
+app.use("/api/permissoes", require("./server/routes/permissoes"));
 
-const { requireAuth } = require("./server/services/authService");
+// TESTE
+app.get("/api/teste", (req,res)=>res.json({ok:true}));
 
-// rota de teste protegida
-app.get("/api/auth-check", requireAuth, (req, res) => {
-  res.json({
-    ok: true,
-    usuario: req.user
-  });
-});
-
-app.listen(PORT, () => console.log("V5 rodando " + PORT));
+app.listen(PORT, () => console.log("Servidor com permissões ativo " + PORT));
