@@ -46,4 +46,8 @@ app.post("/api/dev/modulos",(req,res)=>{
  res.json({ok:true});
 });
 
-app.listen(3000,()=>console.log("MODULAR ATIVO"));
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log("MODULAR ATIVO NA PORTA " + PORT);
+});
