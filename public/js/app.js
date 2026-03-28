@@ -1,105 +1,46 @@
 
-function getEmpresa(){
-  return localStorage.getItem("empresa_atual") || "";
-}
+function getEmpresa(){return localStorage.getItem("empresa_atual")||"";}
+function getKey(t){return t+"_"+getEmpresa();}
+function getData(t){return JSON.parse(localStorage.getItem(getKey(t))||"[]");}
+function save(t,d){localStorage.setItem(getKey(t),JSON.stringify(d));}
 
-function getKey(tipo){
-  return tipo + "_" + getEmpresa();
+function mostrar(id){
+ document.querySelectorAll('.modulo').forEach(m=>m.classList.add('hidden'));
+ document.getElementById(id).classList.remove('hidden');
 }
-
-function getData(tipo){
-  return JSON.parse(localStorage.getItem(getKey(tipo)) || "[]");
-}
-
-function save(tipo,data){
-  localStorage.setItem(getKey(tipo), JSON.stringify(data));
-}
-
-// ================= ESTOQUE =================
-function getEstoque(){ return getData("estoque"); }
-function saveEstoque(d){ save("estoque", d); }
 
 function add(){
-  const p = document.getElementById("produto").value.trim();
-  const q = parseInt(document.getElementById("qtd").value);
-  if(!p || !q) return;
-
-  let data = getEstoque();
-  const ex = data.find(i=>i.p===p);
-
-  if(ex){ ex.q += q; }
-  else{ data.push({p,q}); }
-
-  saveEstoque(data);
-  render();
+ const p=document.getElementById("produto").value.trim();
+ const q=parseInt(document.getElementById("qtd").value);
+ if(!p||!q)return;
+ let d=getData("estoque");
+ let e=d.find(i=>i.p===p);
+ if(e){e.q+=q}else{d.push({p,q})}
+ save("estoque",d);render();
 }
 
-// ================= WMS =================
-function validarEndereco(end){
-  return /^\d{2}-\d{3}-\d-\d$/.test(end);
-}
+function validarEndereco(e){return /^\d{2}-\d{3}-\d-\d$/.test(e);}
 
 function addEndereco(){
-  const end = document.getElementById("endereco").value.trim();
-  if(!validarEndereco(end)){
-    alert("Use 05-001-3-1");
-    return;
-  }
-
-  let lista = getData("wms");
-
-  if(lista.find(e=>e.endereco===end)){
-    alert("Já existe");
-    return;
-  }
-
-  lista.push({ endereco:end, produto:"", qtd:0 });
-  save("wms",lista);
-  render();
+ const e=document.getElementById("endereco").value.trim();
+ if(!validarEndereco(e)){alert("Formato 05-001-3-1");return;}
+ let w=getData("wms");
+ if(w.find(x=>x.endereco===e)){alert("Existe");return;}
+ w.push({endereco:e,produto:"",qtd:0});
+ save("wms",w);render();
 }
 
-function vincular(index){
-  let lista = getData("wms");
-  const p = prompt("Produto:");
-  const q = parseInt(prompt("Qtd:"));
-  if(!p || !q) return;
-
-  lista[index].produto = p;
-  lista[index].qtd = q;
-
-  save("wms",lista);
-  render();
-}
-
-function removerEndereco(index){
-  let lista = getData("wms");
-  lista.splice(index,1);
-  save("wms",lista);
-  render();
-}
-
-// ================= RENDER =================
 function render(){
-  const emp = getEmpresa();
-  if(!emp){ window.location="/login"; return; }
+ document.getElementById("emp").innerText=getEmpresa();
 
-  document.getElementById("emp").innerText = emp;
+ let est=getData("estoque");
+ document.getElementById("lista").innerHTML=est.map(i=>`<li>${i.p}-${i.q}</li>`).join("");
 
-  // estoque
-  let est = getEstoque();
-  document.getElementById("lista").innerHTML =
-    est.map(i=>`<li>${i.p} - ${i.q}</li>`).join("");
+ let w=getData("wms");
+ document.getElementById("wms_lista").innerHTML=w.map(i=>`<li>${i.endereco}</li>`).join("");
 
-  // wms
-  let w = getData("wms");
-  document.getElementById("wms").innerHTML =
-    w.map((e,i)=>`
-      <li>
-        ${e.endereco} → ${e.produto || "vazio"} (${e.qtd})
-        <button onclick="vincular(${i})">📦</button>
-        <button onclick="removerEndereco(${i})">❌</button>
-      </li>
-    `).join("");
+ let grid=document.getElementById("grid");
+ grid.innerHTML=w.map(i=>`<div class="cell">${i.endereco}<br>${i.produto||""}</div>`).join("");
 }
 
 render();
