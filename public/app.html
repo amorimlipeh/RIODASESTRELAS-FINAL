@@ -2,14 +2,26 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>WMS MAPA</title>
+<title>Picking</title>
 <link rel="stylesheet" href="/css/app.css">
 </head>
 <body>
 
-<h2>🗺️ MAPA WMS</h2>
+<h2>📦 PEDIDOS</h2>
 
-<div id="grid"></div>
+<input id="produto" placeholder="Produto">
+<input id="qtd" placeholder="Quantidade">
+<button onclick="addPedido()">Adicionar</button>
+
+<ul id="pedido"></ul>
+
+<button onclick="iniciar()">Iniciar Picking</button>
+
+<hr>
+
+<h2>🚶 Picking</h2>
+<div id="picking"></div>
+<button onclick="proximo()">Próximo</button>
 
 <script src="/js/app.js"></script>
 </body>
