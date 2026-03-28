@@ -2,39 +2,37 @@ function getEmpresas(){
  return JSON.parse(localStorage.getItem("empresas")||"[]");
 }
 
-function saveEmpresas(e){
- localStorage.setItem("empresas",JSON.stringify(e));
+function renderEmpresas(){
+ const sel=document.getElementById("empresa");
+ const empresas=getEmpresas();
+ sel.innerHTML=empresas.map(e=>`<option value="${e.nome}">${e.nome}</option>`).join("");
 }
 
-function addEmpresa(){
- const nome=document.getElementById("empresa").value;
- const status=document.getElementById("status").value;
+function login(){
+ const empresa=document.getElementById("empresa").value;
+ const email=document.getElementById("email").value;
+ const senha=document.getElementById("senha").value;
 
- if(!nome) return;
+ const empresas=getEmpresas();
+ const emp=empresas.find(e=>e.nome===empresa);
 
- const e=getEmpresas();
- e.push({nome,status});
- saveEmpresas(e);
+ if(!emp){
+  document.getElementById("status").innerText="Empresa não encontrada";
+  return;
+ }
 
- render();
-}
+ if(emp.status==="bloqueado"){
+  document.getElementById("status").innerText="Empresa bloqueada";
+  return;
+ }
 
-function render(){
- const el=document.getElementById("empresas");
- el.innerHTML=getEmpresas().map((e,i)=>`
- <li>
- ${e.nome} - ${e.status}
- <button onclick="toggle(${i})">Alterar</button>
- </li>`).join("");
-}
+ // login fake por enquanto
+ localStorage.setItem("rio_token","ok");
+ localStorage.setItem("empresa_atual",empresa);
 
-function toggle(i){
- const e=getEmpresas();
- e[i].status = e[i].status==="ativo"?"bloqueado":"ativo";
- saveEmpresas(e);
- render();
+ window.location="/app";
 }
 
 window.onload=()=>{
- render();
+ renderEmpresas();
 }
