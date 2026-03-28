@@ -8,42 +8,37 @@ const PORT=process.env.PORT||3000;
 app.use(express.json());
 app.use(express.static(path.join(__dirname,"public")));
 
-let estoque=[];
-let ocupacao={};
+let estoque=[
+ {codigo:"A",endereco:"01-001-1-1"},
+ {codigo:"B",endereco:"01-010-1-1"},
+ {codigo:"C",endereco:"02-005-1-1"}
+];
 
-// gerar endereço inteligente
-function gerarEndereco(){
- for(let r=1;r<=5;r++){
-  for(let p=1;p<=20;p++){
-   let end=`0${r}-${String(p).padStart(3,"0")}-1-1`;
-   if(!ocupacao[end]){
-    return end;
-   }
-  }
- }
- return null;
+// calcular rota (ordenar por rua e posição)
+function ordenar(end){
+ const [r,p]=end.split("-");
+ return {r:parseInt(r),p:parseInt(p)};
 }
 
-// entrada com sugestão
-app.post("/api/estoque",(req,res)=>{
- const {codigo,qtd}=req.body;
+app.post("/api/rota",(req,res)=>{
+ const {itens}=req.body;
 
- let endereco=gerarEndereco();
+ let lista=[];
 
- if(!endereco){
-  return res.json({ok:false,erro:"Sem espaço"});
- }
+ itens.forEach(cod=>{
+  const item=estoque.find(e=>e.codigo===cod);
+  if(item) lista.push(item);
+ });
 
- ocupacao[endereco]=true;
+ lista.sort((a,b)=>{
+  const A=ordenar(a.endereco);
+  const B=ordenar(b.endereco);
 
- estoque.push({codigo,qtd,endereco});
+  if(A.r!==B.r) return A.r-B.r;
+  return A.p-B.p;
+ });
 
- res.json({ok:true,endereco});
+ res.json({ok:true,rota:lista});
 });
 
-// listar
-app.get("/api/estoque",(req,res)=>{
- res.json({ok:true,estoque});
-});
-
-app.listen(PORT,()=>console.log("WMS INTELIGENTE"));
+app.listen(PORT,()=>console.log("ROTA INTELIGENTE"));

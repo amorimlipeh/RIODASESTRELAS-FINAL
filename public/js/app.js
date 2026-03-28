@@ -1,28 +1,20 @@
 
-async function add(){
- const res=await fetch("/api/estoque",{
+async function calc(){
+ const itens=document.getElementById("itens").value.split(",");
+ const res=await fetch("/api/rota",{
   method:"POST",
   headers:{"Content-Type":"application/json"},
-  body:JSON.stringify({codigo:codigo.value,qtd:qtd.value})
+  body:JSON.stringify({itens})
  });
 
  const d=await res.json();
- alert("Endereço sugerido: "+d.endereco);
- load();
-}
 
-async function load(){
- const r=await fetch("/api/estoque");
- const d=await r.json();
-
- const el=document.getElementById("list");
+ const el=document.getElementById("rota");
  el.innerHTML="";
 
- d.estoque.forEach(i=>{
+ d.rota.forEach(i=>{
   const div=document.createElement("div");
-  div.innerText=i.codigo+" | "+i.qtd+" | "+i.endereco;
+  div.innerText=i.codigo+" → "+i.endereco;
   el.appendChild(div);
  });
 }
-
-window.onload=load;
