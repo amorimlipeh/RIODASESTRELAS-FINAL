@@ -1,1 +1,37 @@
-body{background:#071a36;color:#fff;font-family:Arial;padding:20px} video{width:300px}
+
+body{
+  background:#071a36;
+  color:#fff;
+  font-family:Arial,sans-serif;
+  padding:20px;
+}
+.box{
+  border:1px solid #1d3c66;
+  padding:12px;
+  margin-bottom:16px;
+  background:#0b2545;
+}
+.grid2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+input,button{
+  margin:4px;
+  padding:8px;
+}
+pre, #estoque div, #logs div, #notificacoes div, #tempoReal div, #ia div, #dashboard div{
+  margin:4px 0;
+}
+.celula{
+  display:inline-flex;
+  width:42px;
+  height:24px;
+  margin:2px;
+  align-items:center;
+  justify-content:center;
+  font-size:9px;
+}
+.vazio{ background:#444; }
+.ocupado{ background:#16a34a; }
+.reservado{ background:#eab308; color:#000; }
