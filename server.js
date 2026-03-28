@@ -13,11 +13,17 @@ app.get("/login", (req,res)=>{
   res.sendFile(path.join(__dirname,"public/login.html"));
 });
 
-// APP (SISTEMA REAL)
+// 🔥 APP REAL → aponta para seu sistema já existente
 app.get("/app", (req,res)=>{
-  res.sendFile(path.join(__dirname,"public/app.html"));
+  res.sendFile(path.join(__dirname,"public","index.html"));
 });
 
+// mantém raiz também abrindo o sistema (compatibilidade)
+app.get("/", (req,res)=>{
+  res.sendFile(path.join(__dirname,"public","index.html"));
+});
+
+// AUTH
 app.use("/api/auth", require("./server/routes/auth"));
 
-app.listen(PORT, ()=>console.log("Fluxo profissional ativo " + PORT));
+app.listen(PORT, ()=>console.log("APP REAL conectado " + PORT));
