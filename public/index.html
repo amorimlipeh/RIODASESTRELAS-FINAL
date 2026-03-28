@@ -1,19 +1,34 @@
+
 <!DOCTYPE html>
 <html>
-<body>
+<body style="background:#071a36;color:#fff;font-family:Arial">
 
-<h1>COBRANÇA AUTOMÁTICA</h1>
+<h1>PAINEL FINANCEIRO</h1>
 
-<button onclick="load()">Ver clientes</button>
+<button onclick="load()">Atualizar</button>
 
-<pre id="out"></pre>
+<div id="list"></div>
 
 <script>
 async function load(){
- const r = await fetch("/api/clientes");
- const d = await r.json();
- document.getElementById("out").innerText = JSON.stringify(d,null,2);
+ const r=await fetch("/api/clientes");
+ const d=await r.json();
+ const el=document.getElementById("list");
+ el.innerHTML="";
+ d.forEach(c=>{
+  const div=document.createElement("div");
+  div.innerHTML=c.empresa+" - "+c.status+
+  " <button onclick='pay("+c.id+")'>Pagar</button>";
+  el.appendChild(div);
+ });
 }
+
+async function pay(id){
+ await fetch("/api/pagar",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id})});
+ load();
+}
+
+load();
 </script>
 
 </body>
