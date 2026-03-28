@@ -14,7 +14,7 @@
   <div class="menu">
     <button onclick="mostrar('estoque')">📦 Estoque</button>
     <button onclick="mostrar('wms')">📍 WMS</button>
-    <button onclick="mostrar('picking')">📋 Picking</button>
+    <button onclick="mostrar('mapa')">🗺️ Mapa</button>
   </div>
 
   <div id="estoque" class="modulo">
@@ -32,17 +32,13 @@
     <ul id="wms_lista"></ul>
   </div>
 
-  <div id="picking" class="modulo hidden">
-    <h2>Picking</h2>
-    <input id="pedido_produto" placeholder="Produto">
-    <input id="pedido_qtd" placeholder="Qtd">
-    <button onclick="criarPedido()">Criar Pedido</button>
-    <ul id="pedidos"></ul>
+  <div id="mapa" class="modulo hidden">
+    <h2>Mapa WMS</h2>
+    <div id="grid"></div>
   </div>
 </div>
 
 <script src="/js/app.js"></script>
-<script src="/js/picking.js"></script>
-<script src="/js/painel_patch.js"></script>
+
 </body>
 </html>
