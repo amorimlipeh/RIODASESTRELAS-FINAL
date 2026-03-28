@@ -1,28 +1,8 @@
 
-body{
-  background:#0b1e3a;
-  color:#fff;
-  font-family:Arial;
-}
-
-.container{
-  max-width:500px;
-  margin:auto;
-  padding:20px;
-}
-
-.menu button{
-  margin:5px;
-  padding:10px;
-}
-
-.modulo{
-  margin-top:20px;
-  padding:15px;
-  background:#132c52;
-  border-radius:10px;
-}
-
-.hidden{
-  display:none;
-}
+body{background:#0b1e3a;color:#fff;font-family:Arial;}
+.container{max-width:600px;margin:auto;padding:20px;}
+.menu button{margin:5px;padding:10px;}
+.modulo{margin-top:20px;padding:15px;background:#132c52;border-radius:10px;}
+.hidden{display:none;}
+#grid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-top:10px;}
+.cell{background:#1e3a6b;padding:10px;border-radius:5px;font-size:12px;}
