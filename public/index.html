@@ -1,22 +1,90 @@
 
-<html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>RIO BASE CONSOLIDADA V3</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
 <body>
-<h1>AUTOMAÇÃO TOTAL</h1>
+  <h1>🌟 RIO DAS ESTRELAS — BASE CONSOLIDADA V3</h1>
 
-<button onclick="run()">Executar IA</button>
+  <section class="box">
+    <h2>Login</h2>
+    <input id="user" placeholder="Usuário" value="desenvolvedor">
+    <input id="senha" placeholder="Senha" value="123">
+    <button onclick="login()">Entrar</button>
+    <div id="loginStatus"></div>
+  </section>
 
-<div id="out"></div>
+  <section class="box">
+    <h2>Estoque + WMS Inteligente</h2>
+    <input id="codigo" placeholder="Código">
+    <input id="qtd" placeholder="Quantidade">
+    <input id="endereco" placeholder="Endereço opcional">
+    <button onclick="adicionarEstoque()">Adicionar</button>
+    <button onclick="buscarSugestao()">Sugerir endereço</button>
+    <div id="sugestao"></div>
+  </section>
 
-<script>
-async function run(){
- const r=await fetch("/api/auto");
- const d=await r.json();
+  <section class="box">
+    <h2>Importador</h2>
+    <input type="file" id="file">
+    <button onclick="previewImportacao()">Preview</button>
+    <button onclick="aplicarImportacao()">Importar + Aplicar</button>
+    <pre id="importador"></pre>
+  </section>
 
- document.getElementById("out").innerHTML=
-  "Próximo pedido: "+d.proximo.id+
-  "<br>Fila: "+JSON.stringify(d.fila);
-}
-</script>
+  <section class="box">
+    <h2>Pedido + Picking + Rota</h2>
+    <input id="pedidoItens" placeholder="Itens separados por vírgula">
+    <button onclick="criarPedido()">Criar pedido</button>
+    <button onclick="calcularRota()">Calcular rota</button>
+    <button onclick="iniciarVoz()">Picking por voz</button>
+    <pre id="pedidoSaida"></pre>
+  </section>
 
+  <section class="grid2">
+    <section class="box">
+      <h2>Dashboard</h2>
+      <div id="dashboard"></div>
+    </section>
+
+    <section class="box">
+      <h2>IA</h2>
+      <div id="ia"></div>
+    </section>
+  </section>
+
+  <section class="grid2">
+    <section class="box">
+      <h2>Tempo real / Notificações</h2>
+      <div id="tempoReal"></div>
+      <div id="notificacoes"></div>
+    </section>
+
+    <section class="box">
+      <h2>Logs</h2>
+      <div id="logs"></div>
+    </section>
+  </section>
+
+  <section class="box">
+    <h2>Estoque Atual</h2>
+    <div id="estoque"></div>
+  </section>
+
+  <section class="box">
+    <h2>WMS (amostra)</h2>
+    <div id="wms"></div>
+  </section>
+
+  <section class="box">
+    <h2>Painel Desenvolvedor</h2>
+    <button onclick="carregarPainelDev()">Atualizar painel</button>
+    <pre id="painelDev"></pre>
+  </section>
+
+  <script src="/js/app.js"></script>
 </body>
 </html>
