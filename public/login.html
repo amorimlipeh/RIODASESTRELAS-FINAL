@@ -1,21 +1,6 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login por Empresa</title>
-  <link rel="stylesheet" href="/css/app.css">
-</head>
-<body>
-  <h2>🔐 LOGIN POR EMPRESA</h2>
-
-  <select id="empresa"></select>
-  <input id="email" placeholder="Email" value="desenvolvedor@rio.com">
-  <input id="senha" placeholder="Senha" type="password" value="123">
-  <button id="btnEntrar" type="button">Entrar</button>
-
-  <div id="status"></div>
-
-  <script src="/js/login-empresa.js"></script>
-</body>
-</html>
+<h2>Login por empresa</h2>
+<select id="empresa"></select>
+<input id="email" placeholder="Email">
+<input id="senha" type="password" placeholder="Senha">
+<button onclick="login()">Entrar</button>
+<script src="/js/login.js"></script>
