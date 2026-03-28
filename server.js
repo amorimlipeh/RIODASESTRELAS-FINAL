@@ -9,21 +9,28 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
 // LOGIN
-app.get("/login", (req,res)=>{
-  res.sendFile(path.join(__dirname,"public/login.html"));
+app.get("/login", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "login.html"));
 });
 
-// 🔥 APP REAL → aponta para seu sistema já existente
-app.get("/app", (req,res)=>{
-  res.sendFile(path.join(__dirname,"public","index.html"));
+// APP REAL
+app.get("/app", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// mantém raiz também abrindo o sistema (compatibilidade)
-app.get("/", (req,res)=>{
-  res.sendFile(path.join(__dirname,"public","index.html"));
+// raiz continua no login
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "login.html"));
 });
 
-// AUTH
 app.use("/api/auth", require("./server/routes/auth"));
 
-app.listen(PORT, ()=>console.log("APP REAL conectado " + PORT));
+const { requireAuth } = require("./server/services/authService");
+
+app.get("/api/auth-check", requireAuth, (req, res) => {
+  res.json({ ok: true, usuario: req.user });
+});
+
+app.listen(PORT, () => {
+  console.log("LOGIN FUNCIONANDO na porta " + PORT);
+});
