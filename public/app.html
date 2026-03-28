@@ -1,26 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>Sistema Integrado</title>
-<link rel="stylesheet" href="/css/app.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema Integrado</title>
+  <link rel="stylesheet" href="/css/app.css">
 </head>
 <body>
 
-<h2>🚀 SISTEMA INTEGRADO</h2>
+<header class="topbar">
+  <h2>🚀 SISTEMA INTEGRADO</h2>
+  <div class="top-actions">
+    <button class="small" id="btnTrocarEmpresa" type="button">Trocar empresa</button>
+    <button class="small" id="btnSair" type="button">Sair</button>
+  </div>
+</header>
 
-<div>
-<b>Empresa atual:</b> <span id="empresaAtual"></span>
+<div class="container">
+  <div class="empresa-box">
+    <b>Empresa atual:</b> <span id="empresaAtual"></span>
+  </div>
+
+  <hr>
+
+  <h3>📦 Estoque</h3>
+  <input id="produto" placeholder="Produto">
+  <input id="qtd" placeholder="Quantidade">
+  <button id="btnAdicionar" type="button">Adicionar</button>
+
+  <ul id="lista"></ul>
 </div>
-
-<hr>
-
-<h3>📦 Estoque</h3>
-<input id="produto" placeholder="Produto">
-<input id="qtd" placeholder="Quantidade">
-<button onclick="add()">Adicionar</button>
-
-<ul id="lista"></ul>
 
 <script src="/js/app.js"></script>
 </body>
