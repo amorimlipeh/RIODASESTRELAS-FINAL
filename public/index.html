@@ -1,90 +1,36 @@
 
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <title>RIO BASE CONSOLIDADA V3</title>
-  <link rel="stylesheet" href="/css/style.css">
-</head>
+<html>
 <body>
-  <h1>🌟 RIO DAS ESTRELAS — BASE CONSOLIDADA V3</h1>
+<h1>SISTEMA MODULAR</h1>
 
-  <section class="box">
-    <h2>Login</h2>
-    <input id="user" placeholder="Usuário" value="desenvolvedor">
-    <input id="senha" placeholder="Senha" value="123">
-    <button onclick="login()">Entrar</button>
-    <div id="loginStatus"></div>
-  </section>
+<h2>Testar módulos</h2>
+<button onclick="test('estoque')">Estoque</button>
+<button onclick="test('dashboard')">Dashboard</button>
+<button onclick="test('picking')">Picking</button>
 
-  <section class="box">
-    <h2>Estoque + WMS Inteligente</h2>
-    <input id="codigo" placeholder="Código">
-    <input id="qtd" placeholder="Quantidade">
-    <input id="endereco" placeholder="Endereço opcional">
-    <button onclick="adicionarEstoque()">Adicionar</button>
-    <button onclick="buscarSugestao()">Sugerir endereço</button>
-    <div id="sugestao"></div>
-  </section>
+<h2>Configurar módulos</h2>
+<input id="mods" placeholder="estoque,dashboard">
+<button onclick="save()">Salvar</button>
 
-  <section class="box">
-    <h2>Importador</h2>
-    <input type="file" id="file">
-    <button onclick="previewImportacao()">Preview</button>
-    <button onclick="aplicarImportacao()">Importar + Aplicar</button>
-    <pre id="importador"></pre>
-  </section>
+<pre id="out"></pre>
 
-  <section class="box">
-    <h2>Pedido + Picking + Rota</h2>
-    <input id="pedidoItens" placeholder="Itens separados por vírgula">
-    <button onclick="criarPedido()">Criar pedido</button>
-    <button onclick="calcularRota()">Calcular rota</button>
-    <button onclick="iniciarVoz()">Picking por voz</button>
-    <pre id="pedidoSaida"></pre>
-  </section>
+<script>
+async function test(m){
+ const r=await fetch("/api/"+m);
+ const d=await r.json();
+ out.innerText=JSON.stringify(d,null,2);
+}
 
-  <section class="grid2">
-    <section class="box">
-      <h2>Dashboard</h2>
-      <div id="dashboard"></div>
-    </section>
+async function save(){
+ const mod=document.getElementById("mods").value.split(",");
+ await fetch("/api/dev/modulos",{
+  method:"POST",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({empresa:"EMPRESA_TESTE",modulos:mod})
+ });
+ alert("salvo");
+}
+</script>
 
-    <section class="box">
-      <h2>IA</h2>
-      <div id="ia"></div>
-    </section>
-  </section>
-
-  <section class="grid2">
-    <section class="box">
-      <h2>Tempo real / Notificações</h2>
-      <div id="tempoReal"></div>
-      <div id="notificacoes"></div>
-    </section>
-
-    <section class="box">
-      <h2>Logs</h2>
-      <div id="logs"></div>
-    </section>
-  </section>
-
-  <section class="box">
-    <h2>Estoque Atual</h2>
-    <div id="estoque"></div>
-  </section>
-
-  <section class="box">
-    <h2>WMS (amostra)</h2>
-    <div id="wms"></div>
-  </section>
-
-  <section class="box">
-    <h2>Painel Desenvolvedor</h2>
-    <button onclick="carregarPainelDev()">Atualizar painel</button>
-    <pre id="painelDev"></pre>
-  </section>
-
-  <script src="/js/app.js"></script>
 </body>
 </html>
