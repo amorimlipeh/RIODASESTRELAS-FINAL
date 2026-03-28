@@ -1,18 +1,31 @@
-
 require("dotenv").config();
 const express = require("express");
+const path = require("path");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "public")));
 
-app.get("/", (req, res) => res.send("RIO V5 PROFISSIONAL"));
+// HOME agora carrega a interface real
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
 
-// ROTAS
-app.use("/api/permissoes", require("./server/routes/permissoes"));
+// AUTH
+app.use("/api/auth", require("./server/routes/auth"));
 
-// TESTE
-app.get("/api/teste", (req,res)=>res.json({ok:true}));
+const { requireAuth } = require("./server/services/authService");
 
-app.listen(PORT, () => console.log("Servidor com permissões ativo " + PORT));
+// rota protegida de teste
+app.get("/api/auth-check", requireAuth, (req, res) => {
+  res.json({
+    ok: true,
+    usuario: req.user
+  });
+});
+
+app.listen(PORT, () => {
+  console.log("RIO FRONT + AUTH rodando na porta " + PORT);
+});
