@@ -1,38 +1,50 @@
 
 const express=require("express");
+const fs=require("fs");
+const path=require("path");
+
 const app=express();
+const PORT=process.env.PORT||3000;
+
 app.use(express.json());
-const path = require("path");
+app.use(express.static(path.join(__dirname,"public")));
 
-app.use(express.static(path.join(__dirname, "public")));
-let clientes=[
- {id:1,empresa:"EMPRESA_TESTE",vencimento:Date.now()+5000,status:"ativo",valor:99}
-];
+const dbPath=path.join(__dirname,"data/clientes.json");
 
-// rotina automática
+function load(){
+ return JSON.parse(fs.readFileSync(dbPath));
+}
+function save(d){
+ fs.writeFileSync(dbPath,JSON.stringify(d,null,2));
+}
+
+// auto bloqueio
 setInterval(()=>{
- const agora=Date.now();
- clientes.forEach(c=>{
-  if(agora>c.vencimento && c.status!=="bloqueado"){
+ let db=load();
+ let now=Date.now();
+ db.clientes.forEach(c=>{
+  if(now>c.vencimento && c.status!=="bloqueado"){
    c.status="bloqueado";
-   console.log("Bloqueado:",c.empresa);
   }
  });
-},3000);
-
-// pagar
-app.post("/api/pagar",(req,res)=>{
- const {id}=req.body;
- const c=clientes.find(x=>x.id==id);
- if(!c) return res.json({ok:false});
- c.vencimento=Date.now()+30000;
- c.status="ativo";
- res.json({ok:true});
-});
+ save(db);
+},5000);
 
 // listar
 app.get("/api/clientes",(req,res)=>{
- res.json(clientes);
+ res.json(load().clientes);
 });
 
-app.listen(process.env.PORT||3000,()=>console.log("COBRANÇA AUTO"));
+// pagar
+app.post("/api/pagar",(req,res)=>{
+ let db=load();
+ let c=db.clientes.find(x=>x.id==req.body.id);
+ if(c){
+  c.vencimento=Date.now()+60000;
+  c.status="ativo";
+  save(db);
+ }
+ res.json({ok:true});
+});
+
+app.listen(PORT,()=>console.log("FINAL RODANDO"));
