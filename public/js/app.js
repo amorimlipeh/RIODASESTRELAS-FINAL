@@ -1,32 +1,19 @@
 
-async function add(){
- await fetch("/api/estoque",{
-  method:"POST",
-  headers:{"Content-Type":"application/json"},
-  body:JSON.stringify({codigo:codigo.value,qtd:qtd.value})
- });
- load();
-}
-
 async function load(){
+ const d=await fetch("/api/dashboard").then(r=>r.json());
  const e=await fetch("/api/estoque").then(r=>r.json());
- const l=await fetch("/api/logs").then(r=>r.json());
 
- const el=document.getElementById("estoque");
+ document.getElementById("totalProd").innerText=d.totalProdutos;
+ document.getElementById("totalQtd").innerText=d.totalQuantidade;
+
+ const el=document.getElementById("lista");
  el.innerHTML="";
  e.estoque.forEach(i=>{
-  const d=document.createElement("div");
-  d.innerText=i.codigo+" | "+i.qtd;
-  el.appendChild(d);
- });
-
- const logEl=document.getElementById("logs");
- logEl.innerHTML="";
- l.logs.forEach(x=>{
-  const d=document.createElement("div");
-  d.innerText=x.msg+" - "+x.time;
-  logEl.appendChild(d);
+  const div=document.createElement("div");
+  div.innerText=i.codigo+" | "+i.qtd;
+  el.appendChild(div);
  });
 }
 
+setInterval(load,2000);
 window.onload=load;

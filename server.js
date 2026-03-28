@@ -11,7 +11,6 @@ app.use(express.static(path.join(__dirname,"public")));
 let estoque=[];
 let logs=[];
 
-// LOG
 function log(msg){
  logs.push({msg,time:new Date()});
 }
@@ -19,10 +18,8 @@ function log(msg){
 // estoque
 app.post("/api/estoque",(req,res)=>{
  const {codigo,qtd}=req.body;
-
  estoque.push({codigo,qtd});
  log("Entrada: "+codigo+" "+qtd);
-
  res.json({ok:true});
 });
 
@@ -31,9 +28,16 @@ app.get("/api/estoque",(req,res)=>{
  res.json({ok:true,estoque});
 });
 
-// logs
-app.get("/api/logs",(req,res)=>{
- res.json({ok:true,logs});
+// stats dashboard
+app.get("/api/dashboard",(req,res)=>{
+ let total=0;
+ estoque.forEach(i=> total+=Number(i.qtd||0));
+
+ res.json({
+  ok:true,
+  totalProdutos: estoque.length,
+  totalQuantidade: total
+ });
 });
 
-app.listen(PORT,()=>console.log("ENTERPRISE FINAL "+PORT));
+app.listen(PORT,()=>console.log("FASE13 "+PORT));

@@ -3,22 +3,20 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>RIO ENTERPRISE</title>
+<title>DASHBOARD</title>
 <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
-<h1>SISTEMA ENTERPRISE</h1>
+<h1>DASHBOARD OPERACIONAL</h1>
 
-<input id="codigo" placeholder="Código">
-<input id="qtd" placeholder="Qtd">
-<button onclick="add()">Adicionar</button>
+<div>
+<h2>Total Produtos: <span id="totalProd"></span></h2>
+<h2>Total Quantidade: <span id="totalQtd"></span></h2>
+</div>
 
-<h2>Estoque</h2>
-<div id="estoque"></div>
-
-<h2>Logs</h2>
-<div id="logs"></div>
+<h3>Estoque</h3>
+<div id="lista"></div>
 
 <script src="/js/app.js"></script>
 </body>
