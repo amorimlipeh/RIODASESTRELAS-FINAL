@@ -1,34 +1,64 @@
-function getData(){
+function getProdutos(){
+  return JSON.parse(localStorage.getItem("produtos")||"[]");
+}
+function saveProdutos(p){
+  localStorage.setItem("produtos", JSON.stringify(p));
+}
+
+function getEstoque(){
   return JSON.parse(localStorage.getItem("estoque")||"[]");
 }
-
-function saveData(data){
-  localStorage.setItem("estoque", JSON.stringify(data));
+function saveEstoque(e){
+  localStorage.setItem("estoque", JSON.stringify(e));
 }
 
-function render(){
-  const lista = document.getElementById("lista");
-  const data = getData();
-  lista.innerHTML = data.map((i,idx)=>`<li>${i.produto} - ${i.qtd} <button onclick="remover(${idx})">X</button></li>`).join("");
+function salvarProduto(){
+  const codigo=document.getElementById("codigo").value;
+  const nome=document.getElementById("nome").value;
+  const fator=document.getElementById("fator").value;
+
+  if(!codigo||!nome) return alert("Preencha");
+
+  const produtos=getProdutos();
+  produtos.push({codigo,nome,fator});
+  saveProdutos(produtos);
+
+  renderProdutos();
+  renderSelect();
 }
 
-function adicionar(){
-  const produto = document.getElementById("produto").value;
-  const qtd = document.getElementById("quantidade").value;
-
-  if(!produto || !qtd) return alert("Preencha");
-
-  const data = getData();
-  data.push({produto, qtd});
-  saveData(data);
-  render();
+function renderProdutos(){
+  const el=document.getElementById("produtos");
+  const produtos=getProdutos();
+  el.innerHTML=produtos.map(p=>`<li>${p.codigo} - ${p.nome}</li>`).join("");
 }
 
-function remover(i){
-  const data = getData();
-  data.splice(i,1);
-  saveData(data);
-  render();
+function renderSelect(){
+  const sel=document.getElementById("produtoSelect");
+  const produtos=getProdutos();
+  sel.innerHTML=produtos.map((p,i)=>`<option value="${i}">${p.nome}</option>`).join("");
+}
+
+function movimentar(){
+  const idx=document.getElementById("produtoSelect").value;
+  const qtd=document.getElementById("quantidade").value;
+
+  const produtos=getProdutos();
+  const estoque=getEstoque();
+
+  const prod=produtos[idx];
+  if(!prod) return;
+
+  estoque.push({produto:prod.nome,qtd});
+  saveEstoque(estoque);
+
+  renderEstoque();
+}
+
+function renderEstoque(){
+  const el=document.getElementById("estoque");
+  const estoque=getEstoque();
+  el.innerHTML=estoque.map(e=>`<li>${e.produto} - ${e.qtd}</li>`).join("");
 }
 
 function logout(){
@@ -36,10 +66,12 @@ function logout(){
   window.location="/login";
 }
 
-window.onload = ()=>{
+window.onload=()=>{
   if(!localStorage.getItem("rio_token")){
     window.location="/login";
     return;
   }
-  render();
+  renderProdutos();
+  renderSelect();
+  renderEstoque();
 }
