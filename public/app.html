@@ -14,14 +14,26 @@
 
 <div class="container">
 
-<h3>📦 ESTOQUE</h3>
+<h3>📦 PRODUTOS</h3>
 
-<input id="produto" placeholder="Produto">
+<input id="codigo" placeholder="Código">
+<input id="nome" placeholder="Nome">
+<input id="fator" placeholder="Fator">
+
+<button onclick="salvarProduto()">Salvar Produto</button>
+
+<ul id="produtos"></ul>
+
+<hr>
+
+<h3>📊 ESTOQUE</h3>
+
+<select id="produtoSelect"></select>
 <input id="quantidade" placeholder="Quantidade">
 
-<button onclick="adicionar()">Adicionar</button>
+<button onclick="movimentar()">Movimentar</button>
 
-<ul id="lista"></ul>
+<ul id="estoque"></ul>
 
 </div>
 
