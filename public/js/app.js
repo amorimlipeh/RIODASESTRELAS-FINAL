@@ -1,24 +1,25 @@
 
-async function loadIA(){
- const r=await fetch("/api/ia");
- const d=await r.json();
+function conectar(){
+ const evt=new EventSource("/api/stream");
 
- const a=document.getElementById("alertas");
- a.innerHTML="";
- d.alertas.forEach(x=>{
-  const div=document.createElement("div");
-  div.innerText="⚠️ "+x;
-  a.appendChild(div);
- });
+ evt.onmessage=(e)=>{
+  const data=JSON.parse(e.data);
 
- const s=document.getElementById("sugestoes");
- s.innerHTML="";
- d.sugestoes.forEach(x=>{
-  const div=document.createElement("div");
-  div.innerText="💡 "+x;
-  s.appendChild(div);
+  if(data.tipo==="estoque"){
+   const el=document.getElementById("tempoReal");
+   const div=document.createElement("div");
+   div.innerText="Atualização: "+data.codigo+" "+data.qtd;
+   el.appendChild(div);
+  }
+ };
+}
+
+async function add(){
+ await fetch("/api/estoque",{
+  method:"POST",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({codigo:codigo.value,qtd:qtd.value})
  });
 }
 
-setInterval(loadIA,3000);
-window.onload=loadIA;
+window.onload=conectar;

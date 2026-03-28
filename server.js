@@ -8,27 +8,44 @@ const PORT=process.env.PORT||3000;
 app.use(express.json());
 app.use(express.static(path.join(__dirname,"public")));
 
-let estoque=[
- {codigo:"A",qtd:50},
- {codigo:"B",qtd:3},
- {codigo:"C",qtd:100}
-];
+let estoque=[];
+let clients=[];
 
-// IA simples
-app.get("/api/ia",(req,res)=>{
- let alertas=[];
- let sugestoes=[];
-
- estoque.forEach(p=>{
-  if(p.qtd<=5){
-   alertas.push("Falta iminente: "+p.codigo);
-  }
-  if(p.qtd>80){
-   sugestoes.push("Produto com alto volume: "+p.codigo+" → enviar para rua rápida");
-  }
+// SSE conexão
+app.get("/api/stream",(req,res)=>{
+ res.set({
+  "Content-Type":"text/event-stream",
+  "Cache-Control":"no-cache",
+  "Connection":"keep-alive"
  });
+ res.flushHeaders();
 
- res.json({ok:true,alertas,sugestoes});
+ clients.push(res);
+
+ req.on("close",()=> {
+  clients=clients.filter(c=>c!==res);
+ });
 });
 
-app.listen(PORT,()=>console.log("IA ATIVA "+PORT));
+function broadcast(data){
+ clients.forEach(c=>{
+  c.write(`data: ${JSON.stringify(data)}\n\n`);
+ });
+}
+
+// estoque
+app.post("/api/estoque",(req,res)=>{
+ const {codigo,qtd}=req.body;
+ estoque.push({codigo,qtd});
+
+ broadcast({tipo:"estoque",codigo,qtd});
+
+ res.json({ok:true});
+});
+
+// listar
+app.get("/api/estoque",(req,res)=>{
+ res.json({ok:true,estoque});
+});
+
+app.listen(PORT,()=>console.log("TEMPO REAL "+PORT));
