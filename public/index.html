@@ -3,16 +3,17 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>PICKING VOZ</title>
+<title>SCAN CAMERA</title>
 <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
-<h1>PICKING POR VOZ</h1>
+<h1>SCAN POR CÂMERA</h1>
 
-<button onclick="start()">Iniciar</button>
+<video id="video" autoplay></video>
+<button onclick="startCamera()">Ativar Câmera</button>
 
-<div id="log"></div>
+<div id="result"></div>
 
 <script src="/js/app.js"></script>
 </body>
