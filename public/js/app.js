@@ -1,48 +1,40 @@
-let pedidos=[];
-let etapa=0;
-
-function getWMS(){
- return JSON.parse(localStorage.getItem("wms")||"[]");
+function getEmpresas(){
+ return JSON.parse(localStorage.getItem("empresas")||"[]");
 }
 
-function addPedido(){
- const produto=document.getElementById("produto").value;
- const qtd=document.getElementById("qtd").value;
-
- pedidos.push({produto,qtd});
- renderPedido();
+function saveEmpresas(e){
+ localStorage.setItem("empresas",JSON.stringify(e));
 }
 
-function renderPedido(){
- const el=document.getElementById("pedido");
- el.innerHTML=pedidos.map(p=>`<li>${p.produto} - ${p.qtd}</li>`).join("");
+function addEmpresa(){
+ const nome=document.getElementById("empresa").value;
+ const status=document.getElementById("status").value;
+
+ if(!nome) return;
+
+ const e=getEmpresas();
+ e.push({nome,status});
+ saveEmpresas(e);
+
+ render();
 }
 
-function iniciar(){
- etapa=0;
- mostrar();
+function render(){
+ const el=document.getElementById("empresas");
+ el.innerHTML=getEmpresas().map((e,i)=>`
+ <li>
+ ${e.nome} - ${e.status}
+ <button onclick="toggle(${i})">Alterar</button>
+ </li>`).join("");
 }
 
-function mostrar(){
- const wms=getWMS();
- const atual=pedidos[etapa];
- if(!atual) return;
-
- const local=wms.find(w=>w.produto===atual.produto);
-
- document.getElementById("picking").innerHTML=`
- Vá para: ${local?local.endereco:"N/A"}<br>
- Retire: ${atual.produto} (${atual.qtd})
- `;
-}
-
-function proximo(){
- etapa++;
- mostrar();
+function toggle(i){
+ const e=getEmpresas();
+ e[i].status = e[i].status==="ativo"?"bloqueado":"ativo";
+ saveEmpresas(e);
+ render();
 }
 
 window.onload=()=>{
- if(!localStorage.getItem("rio_token")){
-  window.location="/login";
- }
+ render();
 }
