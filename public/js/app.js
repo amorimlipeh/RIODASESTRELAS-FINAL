@@ -1,20 +1,28 @@
 
-async function calc(){
- const itens=document.getElementById("itens").value.split(",");
- const res=await fetch("/api/rota",{
-  method:"POST",
-  headers:{"Content-Type":"application/json"},
-  body:JSON.stringify({itens})
- });
+let rota=[];
+let index=0;
 
- const d=await res.json();
+async function start(){
+ const r=await fetch("/api/picking");
+ const d=await r.json();
+ rota=d.rota;
+ index=0;
+ falar();
+}
 
- const el=document.getElementById("rota");
- el.innerHTML="";
+function falar(){
+ if(index>=rota.length) return;
 
- d.rota.forEach(i=>{
-  const div=document.createElement("div");
-  div.innerText=i.codigo+" → "+i.endereco;
-  el.appendChild(div);
- });
+ const item=rota[index];
+ const texto=`Rua ${item.endereco}, pegar ${item.qtd} caixas do produto ${item.codigo}`;
+
+ const msg=new SpeechSynthesisUtterance(texto);
+ speechSynthesis.speak(msg);
+
+ document.getElementById("log").innerHTML+=`<div>${texto}</div>`;
+
+ msg.onend=()=>{
+  index++;
+  falar();
+ };
 }
