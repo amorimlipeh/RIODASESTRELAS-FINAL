@@ -1,25 +1,39 @@
 
-function conectar(){
- const evt=new EventSource("/api/stream");
+let empresa="A";
 
- evt.onmessage=(e)=>{
-  const data=JSON.parse(e.data);
+async function login(){
+ const res=await fetch("/api/login",{
+  method:"POST",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({user:user.value,senha:senha.value})
+ });
 
-  if(data.tipo==="estoque"){
-   const el=document.getElementById("tempoReal");
-   const div=document.createElement("div");
-   div.innerText="Atualização: "+data.codigo+" "+data.qtd;
-   el.appendChild(div);
-  }
- };
+ const d=await res.json();
+ if(!d.ok){alert("erro");return;}
+
+ empresa=d.usuario.empresa;
+ alert("logado "+empresa);
+ load();
 }
 
 async function add(){
  await fetch("/api/estoque",{
   method:"POST",
   headers:{"Content-Type":"application/json"},
-  body:JSON.stringify({codigo:codigo.value,qtd:qtd.value})
+  body:JSON.stringify({codigo:codigo.value,qtd:qtd.value,empresa})
  });
+ load();
 }
 
-window.onload=conectar;
+async function load(){
+ const res=await fetch("/api/estoque/"+empresa);
+ const d=await res.json();
+
+ const el=document.getElementById("list");
+ el.innerHTML="";
+ d.estoque.forEach(i=>{
+  const div=document.createElement("div");
+  div.innerText=i.codigo+" | "+i.qtd;
+  el.appendChild(div);
+ });
+}

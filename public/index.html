@@ -1,21 +1,19 @@
 
-<!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-<title>TEMPO REAL</title>
-<link rel="stylesheet" href="/css/style.css">
-</head>
 <body>
+<h1>MULTI EMPRESA</h1>
 
-<h1>SISTEMA TEMPO REAL</h1>
+<h2>Login</h2>
+<input id="user" placeholder="user">
+<input id="senha" placeholder="senha">
+<button onclick="login()">Entrar</button>
 
-<input id="codigo" placeholder="Código">
-<input id="qtd" placeholder="Qtd">
-<button onclick="add()">Adicionar</button>
+<h2>Estoque</h2>
+<input id="codigo">
+<input id="qtd">
+<button onclick="add()">Add</button>
 
-<h2>Atualizações ao vivo</h2>
-<div id="tempoReal"></div>
+<div id="list"></div>
 
 <script src="/js/app.js"></script>
 </body>
