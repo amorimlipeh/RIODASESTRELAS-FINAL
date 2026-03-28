@@ -1,17 +1,22 @@
 
 async function load(){
- const d=await fetch("/api/dashboard").then(r=>r.json());
  const e=await fetch("/api/estoque").then(r=>r.json());
+ const n=await fetch("/api/notificacoes").then(r=>r.json());
 
- document.getElementById("totalProd").innerText=d.totalProdutos;
- document.getElementById("totalQtd").innerText=d.totalQuantidade;
-
- const el=document.getElementById("lista");
+ const el=document.getElementById("estoque");
  el.innerHTML="";
  e.estoque.forEach(i=>{
   const div=document.createElement("div");
   div.innerText=i.codigo+" | "+i.qtd;
   el.appendChild(div);
+ });
+
+ const notif=document.getElementById("notificacoes");
+ notif.innerHTML="";
+ n.notificacoes.forEach(x=>{
+  const div=document.createElement("div");
+  div.innerText=x.msg;
+  notif.appendChild(div);
  });
 }
 
