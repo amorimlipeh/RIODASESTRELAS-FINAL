@@ -1,28 +1,18 @@
 
-let rota=[];
-let index=0;
+async function startCamera(){
+ const video=document.getElementById("video");
+ const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}});
+ video.srcObject=stream;
 
-async function start(){
- const r=await fetch("/api/picking");
- const d=await r.json();
- rota=d.rota;
- index=0;
- falar();
+ setInterval(()=>{
+  fakeScan();
+ },3000);
 }
 
-function falar(){
- if(index>=rota.length) return;
+// simulação reconhecimento (base para IA real)
+function fakeScan(){
+ const codigos=["A123","B456","C789"];
+ const cod=codigos[Math.floor(Math.random()*codigos.length)];
 
- const item=rota[index];
- const texto=`Rua ${item.endereco}, pegar ${item.qtd} caixas do produto ${item.codigo}`;
-
- const msg=new SpeechSynthesisUtterance(texto);
- speechSynthesis.speak(msg);
-
- document.getElementById("log").innerHTML+=`<div>${texto}</div>`;
-
- msg.onend=()=>{
-  index++;
-  falar();
- };
+ document.getElementById("result").innerText="Detectado: "+cod;
 }
