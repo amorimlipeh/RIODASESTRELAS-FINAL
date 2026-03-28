@@ -15,7 +15,7 @@ app.get("/login", (req, res) => {
 
 // APP REAL
 app.get("/app", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  res.sendFile(path.join(__dirname, "public", "app.html"));
 });
 
 // raiz continua no login
@@ -32,5 +32,5 @@ app.get("/api/auth-check", requireAuth, (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log("LOGIN FUNCIONANDO na porta " + PORT);
+  console.log("LOGIN + APP REAL na porta " + PORT);
 });
