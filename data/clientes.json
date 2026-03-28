@@ -1,0 +1,11 @@
+{
+  "clientes": [
+    {
+      "id": 1,
+      "empresa": "EMPRESA_TESTE",
+      "valor": 99,
+      "vencimento": 0,
+      "status": "ativo"
+    }
+  ]
+}
