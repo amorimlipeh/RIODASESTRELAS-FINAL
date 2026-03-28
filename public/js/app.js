@@ -1,24 +1,24 @@
 
-async function load(){
- const e=await fetch("/api/estoque").then(r=>r.json());
- const n=await fetch("/api/notificacoes").then(r=>r.json());
+async function loadIA(){
+ const r=await fetch("/api/ia");
+ const d=await r.json();
 
- const el=document.getElementById("estoque");
- el.innerHTML="";
- e.estoque.forEach(i=>{
+ const a=document.getElementById("alertas");
+ a.innerHTML="";
+ d.alertas.forEach(x=>{
   const div=document.createElement("div");
-  div.innerText=i.codigo+" | "+i.qtd;
-  el.appendChild(div);
+  div.innerText="⚠️ "+x;
+  a.appendChild(div);
  });
 
- const notif=document.getElementById("notificacoes");
- notif.innerHTML="";
- n.notificacoes.forEach(x=>{
+ const s=document.getElementById("sugestoes");
+ s.innerHTML="";
+ d.sugestoes.forEach(x=>{
   const div=document.createElement("div");
-  div.innerText=x.msg;
-  notif.appendChild(div);
+  div.innerText="💡 "+x;
+  s.appendChild(div);
  });
 }
 
-setInterval(load,2000);
-window.onload=load;
+setInterval(loadIA,3000);
+window.onload=loadIA;

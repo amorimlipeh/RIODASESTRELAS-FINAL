@@ -8,34 +8,27 @@ const PORT=process.env.PORT||3000;
 app.use(express.json());
 app.use(express.static(path.join(__dirname,"public")));
 
-let estoque=[];
-let notificacoes=[];
+let estoque=[
+ {codigo:"A",qtd:50},
+ {codigo:"B",qtd:3},
+ {codigo:"C",qtd:100}
+];
 
-function addNotificacao(msg){
- notificacoes.push({msg,time:new Date()});
- if(notificacoes.length>50) notificacoes.shift();
-}
+// IA simples
+app.get("/api/ia",(req,res)=>{
+ let alertas=[];
+ let sugestoes=[];
 
-// estoque
-app.post("/api/estoque",(req,res)=>{
- const {codigo,qtd}=req.body;
- estoque.push({codigo,qtd});
+ estoque.forEach(p=>{
+  if(p.qtd<=5){
+   alertas.push("Falta iminente: "+p.codigo);
+  }
+  if(p.qtd>80){
+   sugestoes.push("Produto com alto volume: "+p.codigo+" → enviar para rua rápida");
+  }
+ });
 
- if(Number(qtd)<=5){
-  addNotificacao("⚠️ Estoque baixo: "+codigo);
- }
-
- res.json({ok:true});
+ res.json({ok:true,alertas,sugestoes});
 });
 
-// listar estoque
-app.get("/api/estoque",(req,res)=>{
- res.json({ok:true,estoque});
-});
-
-// notificacoes
-app.get("/api/notificacoes",(req,res)=>{
- res.json({ok:true,notificacoes});
-});
-
-app.listen(PORT,()=>console.log("FASE14 "+PORT));
+app.listen(PORT,()=>console.log("IA ATIVA "+PORT));
