@@ -3,51 +3,25 @@ const express=require("express");
 const path=require("path");
 
 const app=express();
+const PORT=process.env.PORT||3000;
+
 app.use(express.json());
 app.use(express.static(path.join(__dirname,"public")));
 
-// módulos por empresa
 let empresas={
  "EMPRESA_TESTE":{
-  modulos:["estoque","dashboard","picking"]
+  modulos:["estoque","dashboard","picking","wms"]
  }
 };
 
-// middleware de permissão
-function check(modulo){
- return (req,res,next)=>{
-  const emp=req.headers["x-empresa"]||"EMPRESA_TESTE";
-  const conf=empresas[emp];
-
-  if(!conf || !conf.modulos.includes(modulo)){
-   return res.json({ok:false,erro:"Sem acesso ao módulo "+modulo});
-  }
-  next();
- };
-}
-
-// ROTAS PROTEGIDAS
-app.get("/api/estoque",check("estoque"),(req,res)=>{
- res.json({ok:true,msg:"acesso estoque ok"});
+app.get("/api/modulos",(req,res)=>{
+ const emp=req.headers["x-empresa"]||"EMPRESA_TESTE";
+ res.json({ok:true,modulos:(empresas[emp]||{modulos:[]}).modulos});
 });
 
-app.get("/api/dashboard",check("dashboard"),(req,res)=>{
- res.json({ok:true,msg:"dashboard ok"});
-});
+app.get("/api/estoque",(req,res)=>res.json({ok:true,data:["A123","B456"]}));
+app.get("/api/dashboard",(req,res)=>res.json({ok:true,data:{produtos:10}}));
+app.get("/api/picking",(req,res)=>res.json({ok:true,data:["A123","B456"]}));
+app.get("/api/wms",(req,res)=>res.json({ok:true,data:"mapa"}));
 
-app.get("/api/picking",check("picking"),(req,res)=>{
- res.json({ok:true,msg:"picking ok"});
-});
-
-// painel dev
-app.post("/api/dev/modulos",(req,res)=>{
- const {empresa,modulos}=req.body;
- empresas[empresa]={modulos};
- res.json({ok:true});
-});
-
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log("MODULAR ATIVO NA PORTA " + PORT);
-});
+app.listen(PORT,()=>console.log("UI PRO ATIVO "+PORT));
