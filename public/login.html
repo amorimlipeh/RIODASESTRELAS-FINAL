@@ -1,11 +1,37 @@
 <!DOCTYPE html>
-<html>
-<head><title>Login</title></head>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RIO DAS ESTRELAS - LOGIN</title>
+  <link rel="stylesheet" href="/css/auth.css">
+</head>
 <body>
-<h2>Login</h2>
-<input id="email" value="desenvolvedor@rio.com"><br>
-<input id="senha" type="password" value="123"><br>
-<button onclick="login()">Entrar</button>
-<script src="/js/auth.js"></script>
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <h1>🌟 RIO DAS ESTRELAS</h1>
+      <p class="sub">Login profissional com autenticação JWT</p>
+
+      <input id="email" placeholder="Email" value="desenvolvedor@rio.com">
+      <input id="senha" placeholder="Senha" type="password" value="123">
+
+      <button id="btnEntrar" type="button">Entrar</button>
+
+      <div class="status" id="status"></div>
+
+      <div class="box">
+        <h3>Usuário logado</h3>
+        <pre id="usuario"></pre>
+      </div>
+
+      <div class="box">
+        <h3>Rota protegida</h3>
+        <button id="btnTeste" type="button">Testar /api/auth-check</button>
+        <pre id="resultado"></pre>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/auth.js"></script>
 </body>
 </html>
