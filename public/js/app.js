@@ -1,16 +1,45 @@
-
-async function migrar(){
-  const r = await fetch('/api/migracao/legado', {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ file:'data/legado.json' })
-  });
-  const d = await r.json();
-  document.getElementById('out').textContent = JSON.stringify(d, null, 2);
+function getData(){
+  return JSON.parse(localStorage.getItem("estoque")||"[]");
 }
 
-async function listar(){
-  const r = await fetch('/api/clientes');
-  const d = await r.json();
-  document.getElementById('out').textContent = JSON.stringify(d, null, 2);
+function saveData(data){
+  localStorage.setItem("estoque", JSON.stringify(data));
+}
+
+function render(){
+  const lista = document.getElementById("lista");
+  const data = getData();
+  lista.innerHTML = data.map((i,idx)=>`<li>${i.produto} - ${i.qtd} <button onclick="remover(${idx})">X</button></li>`).join("");
+}
+
+function adicionar(){
+  const produto = document.getElementById("produto").value;
+  const qtd = document.getElementById("quantidade").value;
+
+  if(!produto || !qtd) return alert("Preencha");
+
+  const data = getData();
+  data.push({produto, qtd});
+  saveData(data);
+  render();
+}
+
+function remover(i){
+  const data = getData();
+  data.splice(i,1);
+  saveData(data);
+  render();
+}
+
+function logout(){
+  localStorage.clear();
+  window.location="/login";
+}
+
+window.onload = ()=>{
+  if(!localStorage.getItem("rio_token")){
+    window.location="/login";
+    return;
+  }
+  render();
 }
