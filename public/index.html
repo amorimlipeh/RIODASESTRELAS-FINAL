@@ -1,35 +1,16 @@
 
 <!DOCTYPE html>
-<html>
-<body style="background:#071a36;color:#fff;font-family:Arial">
-
-<h1>PAINEL FINANCEIRO</h1>
-
-<button onclick="load()">Atualizar</button>
-
-<div id="list"></div>
-
-<script>
-async function load(){
- const r=await fetch("/api/clientes");
- const d=await r.json();
- const el=document.getElementById("list");
- el.innerHTML="";
- d.forEach(c=>{
-  const div=document.createElement("div");
-  div.innerHTML=c.empresa+" - "+c.status+
-  " <button onclick='pay("+c.id+")'>Pagar</button>";
-  el.appendChild(div);
- });
-}
-
-async function pay(id){
- await fetch("/api/pagar",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id})});
- load();
-}
-
-load();
-</script>
-
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>RIO V5 MIGRAÇÃO</title>
+  <link rel="stylesheet" href="/public.css">
+</head>
+<body>
+  <h1>RIO V5 MIGRAÇÃO</h1>
+  <button onclick="migrar()">Migrar legado</button>
+  <button onclick="listar()">Listar clientes</button>
+  <pre id="out"></pre>
+  <script src="/app.js"></script>
 </body>
 </html>
