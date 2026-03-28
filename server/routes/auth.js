@@ -3,7 +3,6 @@ const { signToken, requireAuth } = require("../services/authService");
 
 const router = express.Router();
 
-// usuários base para login inicial
 const usuarios = [
   {
     id: 1,
@@ -35,7 +34,9 @@ router.post("/login", (req, res) => {
   const { email, senha } = req.body || {};
 
   const user = usuarios.find(
-    (u) => u.email === String(email || "").trim() && u.senha === String(senha || "").trim()
+    (u) =>
+      u.email === String(email || "").trim() &&
+      u.senha === String(senha || "").trim()
   );
 
   if (!user) {
