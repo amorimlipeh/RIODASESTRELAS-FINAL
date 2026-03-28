@@ -1,36 +1,25 @@
 
+<!DOCTYPE html>
 <html>
+<head>
+<meta charset="UTF-8">
+<title>RIO UI PRO</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
 <body>
-<h1>SISTEMA MODULAR</h1>
 
-<h2>Testar módulos</h2>
-<button onclick="test('estoque')">Estoque</button>
-<button onclick="test('dashboard')">Dashboard</button>
-<button onclick="test('picking')">Picking</button>
+<div class="layout">
+  <aside class="sidebar">
+    <h2>RIO</h2>
+    <div id="menu"></div>
+  </aside>
 
-<h2>Configurar módulos</h2>
-<input id="mods" placeholder="estoque,dashboard">
-<button onclick="save()">Salvar</button>
+  <main class="content">
+    <h1 id="title">Dashboard</h1>
+    <div id="view"></div>
+  </main>
+</div>
 
-<pre id="out"></pre>
-
-<script>
-async function test(m){
- const r=await fetch("/api/"+m);
- const d=await r.json();
- out.innerText=JSON.stringify(d,null,2);
-}
-
-async function save(){
- const mod=document.getElementById("mods").value.split(",");
- await fetch("/api/dev/modulos",{
-  method:"POST",
-  headers:{"Content-Type":"application/json"},
-  body:JSON.stringify({empresa:"EMPRESA_TESTE",modulos:mod})
- });
- alert("salvo");
-}
-</script>
-
+<script src="/js/app.js"></script>
 </body>
 </html>
