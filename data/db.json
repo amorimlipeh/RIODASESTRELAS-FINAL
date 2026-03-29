@@ -1,0 +1,68 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "desenvolvedor@rio.com",
+      "senha": "123",
+      "empresa": "MASTER",
+      "tipo": "desenvolvedor"
+    },
+    {
+      "id": 2,
+      "email": "admin@empresa.com",
+      "senha": "123",
+      "empresa": "EMPRESA_TESTE",
+      "tipo": "admin"
+    },
+    {
+      "id": 3,
+      "email": "operador@empresa.com",
+      "senha": "123",
+      "empresa": "EMPRESA_TESTE",
+      "tipo": "operador"
+    }
+  ],
+  "companies": [
+    {
+      "id": 1,
+      "nome": "EMPRESA_TESTE",
+      "plano": "profissional",
+      "valor": 99,
+      "status": "ativo"
+    }
+  ],
+  "produtos": [
+    {
+      "codigo": "PROD001",
+      "descricao": "Caixa de teste",
+      "fator": 12,
+      "lastro": 10,
+      "camada": 5,
+      "caixas_por_pallet": 50
+    },
+    {
+      "codigo": "PROD002",
+      "descricao": "Produto de apoio",
+      "fator": 6,
+      "lastro": 8,
+      "camada": 4,
+      "caixas_por_pallet": 32
+    }
+  ],
+  "estoque": [
+    {
+      "codigo": "PROD001",
+      "endereco": "04-001-1-1",
+      "quantidade": 100,
+      "reservado": 0
+    },
+    {
+      "codigo": "PROD002",
+      "endereco": "04-002-1-1",
+      "quantidade": 60,
+      "reservado": 0
+    }
+  ],
+  "pedidos": [],
+  "logs": []
+}
