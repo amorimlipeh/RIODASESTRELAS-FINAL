@@ -1,34 +1,172 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistema Integrado</title>
-  <link rel="stylesheet" href="/css/app.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RIO DAS ESTRELAS - SISTEMA</title>
+<link rel="stylesheet" href="/css/app.css">
 </head>
 <body>
+<div class="layout">
+  <aside class="sidebar">
+    <h2>🌟 RIO DAS ESTRELAS</h2>
+    <div class="company" id="empresaAtual">-</div>
+    <div class="menu">
+      <button class="menu-item active" data-view="dashboard">Dashboard</button>
+      <button class="menu-item" data-view="estoque">Estoque</button>
+      <button class="menu-item" data-view="produtos">Produtos</button>
+      <button class="menu-item" data-view="wms">WMS</button>
+      <button class="menu-item" data-view="pickings">Pickings</button>
+      <button class="menu-item" data-view="admin">Admin</button>
+      <button class="menu-item" data-view="dev">Painel Desenvolvedor</button>
+    </div>
+    <button id="btnLogout" class="logout">Sair</button>
+  </aside>
 
-<header class="topbar">
-  <h2>🚀 SISTEMA INTEGRADO</h2>
-  <div class="top-actions">
-    <button class="small" id="btnTrocarEmpresa" type="button">Trocar empresa</button>
-    <button class="small" id="btnSair" type="button">Sair</button>
-  </div>
-</header>
+  <main class="content">
+    <header class="topbar">
+      <div id="boasVindas">Sistema online</div>
+      <div id="statusSistema">Online</div>
+    </header>
 
-<div class="container">
-  <div class="empresa-box">
-    <b>Empresa atual:</b> <span id="empresaAtual"></span>
-  </div>
+    <section id="view-dashboard" class="view active">
+      <div class="grid">
+        <div class="card"><h3>Usuário</h3><div id="dash-user">-</div></div>
+        <div class="card"><h3>Empresa</h3><div id="dash-company">-</div></div>
+        <div class="card"><h3>Tipo</h3><div id="dash-role">-</div></div>
+        <div class="card"><h3>Produtos</h3><div id="kpi-produtos">0</div></div>
+        <div class="card"><h3>Estoque</h3><div id="kpi-estoque">0</div></div>
+        <div class="card"><h3>Pedidos</h3><div id="kpi-pedidos">0</div></div>
+      </div>
+    </section>
 
-  <hr>
+    <section id="view-estoque" class="view">
+      <div class="card">
+        <h3>Entrada de estoque</h3>
+        <div class="row">
+          <input id="e_codigo" placeholder="Código do produto">
+          <input id="e_endereco" placeholder="05-001-3-1">
+          <input id="e_quantidade" placeholder="Quantidade" type="number">
+          <button id="btnAdicionarEstoque">Adicionar</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Estoque atual</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Código</th><th>Endereço</th><th>Qtd</th><th>Reservado</th></tr></thead>
+            <tbody id="tbodyEstoque"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
 
-  <h3>📦 Estoque</h3>
-  <input id="produto" placeholder="Produto">
-  <input id="qtd" placeholder="Quantidade">
-  <button id="btnAdicionar" type="button">Adicionar</button>
+    <section id="view-produtos" class="view">
+      <div class="card">
+        <h3>Cadastro de produto</h3>
+        <div class="row">
+          <input id="p_codigo" placeholder="Código">
+          <input id="p_desc" placeholder="Descrição">
+          <input id="p_fator" placeholder="Fator" type="number">
+          <input id="p_lastro" placeholder="Lastro" type="number">
+          <input id="p_camada" placeholder="Camada" type="number">
+          <button id="btnSalvarProduto">Salvar</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Produtos</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Código</th><th>Descrição</th><th>Fator</th><th>Pallet</th><th>Ações</th></tr></thead>
+            <tbody id="tbodyProdutos"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
 
-  <ul id="lista"></ul>
+    <section id="view-wms" class="view">
+      <div class="card">
+        <h3>Mapa WMS</h3>
+        <div class="row">
+          <select id="ruaFiltro"></select>
+          <select id="andarFiltro"></select>
+          <button id="btnCarregarMapa">Carregar mapa</button>
+        </div>
+        <div class="legend">
+          <span class="pill bloqueado">bloqueado</span>
+          <span class="pill buraco">buraco</span>
+          <span class="pill ocupado">ocupado</span>
+          <span class="pill reservado">reservado</span>
+          <span class="pill vazio">vazio</span>
+        </div>
+        <div id="gridWms" class="grid-wms"></div>
+      </div>
+    </section>
+
+    <section id="view-pickings" class="view">
+      <div class="card">
+        <h3>Novo pedido</h3>
+        <div class="row">
+          <input id="pedidoCodigo" placeholder="Código">
+          <input id="pedidoQuantidade" placeholder="Quantidade" type="number">
+          <button id="btnAddItemPedido">Adicionar item</button>
+          <button id="btnSalvarPedido">Salvar pedido</button>
+        </div>
+        <ul id="itensPedido"></ul>
+      </div>
+      <div class="card">
+        <h3>Pedidos e pickings</h3>
+        <div id="listaPedidos"></div>
+      </div>
+    </section>
+
+    <section id="view-admin" class="view">
+      <div class="grid">
+        <div class="card">
+          <h3>Resumo</h3>
+          <div id="adminResumo">Sem dados</div>
+        </div>
+        <div class="card">
+          <h3>Nova empresa</h3>
+          <div class="stack">
+            <input id="empresaNome" placeholder="Empresa">
+            <input id="empresaPlano" placeholder="Plano" value="profissional">
+            <input id="empresaValor" placeholder="Valor" value="99" type="number">
+            <button id="btnCriarEmpresa">Criar empresa</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Empresas</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Empresa</th><th>Plano</th><th>Valor</th><th>Status</th></tr></thead>
+            <tbody id="tbodyEmpresas"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-dev" class="view">
+      <div class="card">
+        <h3>Importação XLSX</h3>
+        <div class="row">
+          <input id="arquivoImportacao" type="file" accept=".xlsx,.xls">
+          <button id="btnImportar">Importar</button>
+        </div>
+        <pre id="saidaImportacao"></pre>
+      </div>
+      <div class="card">
+        <h3>Teste de permissão</h3>
+        <button id="btnTesteAdmin">Testar admin-only</button>
+        <pre id="saidaPermissao"></pre>
+      </div>
+      <div class="card">
+        <h3>Logs</h3>
+        <div id="listaLogs"></div>
+      </div>
+    </section>
+  </main>
 </div>
 
 <script src="/js/app.js"></script>

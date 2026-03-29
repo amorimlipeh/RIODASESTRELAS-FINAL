@@ -1,6 +1,30 @@
-<h2>Login por empresa</h2>
-<select id="empresa"></select>
-<input id="email" placeholder="Email">
-<input id="senha" type="password" placeholder="Senha">
-<button onclick="login()">Entrar</button>
-<script src="/js/login.js"></script>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login por Empresa</title>
+  <link rel="stylesheet" href="/css/auth.css">
+</head>
+<body>
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <h2>🔐 LOGIN POR EMPRESA</h2>
+
+      <label>Email</label>
+      <input id="email" placeholder="Email" value="desenvolvedor@rio.com">
+      <label>Senha</label>
+      <input id="senha" placeholder="Senha" type="password" value="123">
+      <button id="btnEntrar" type="button">Entrar</button>
+      <div id="status"></div>
+
+      <div class="seed">
+        <div>desenvolvedor@rio.com / 123</div>
+        <div>admin@empresa.com / 123</div>
+        <div>operador@empresa.com / 123</div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/auth.js"></script>
+</body>
+</html>
