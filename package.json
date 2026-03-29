@@ -1,13 +1,16 @@
 {
-  "name": "rio-front-auth-integrado",
+  "name": "rio-das-estrelas-consolidado-original",
   "version": "1.0.0",
+  "description": "Consolidação do pacote original enviado pelo usuário",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
+    "dotenv": "^16.4.5",
     "express": "^4.18.2",
-    "jsonwebtoken": "^9.0.0",
-    "dotenv": "^16.0.0"
+    "jsonwebtoken": "^9.0.2",
+    "multer": "1.4.5-lts.1",
+    "xlsx": "0.18.5"
   }
 }
