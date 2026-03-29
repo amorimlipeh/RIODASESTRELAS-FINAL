@@ -1,51 +1,35 @@
-
-document.addEventListener("DOMContentLoaded", function(){
-
-  function login(){
-    const email = document.getElementById("email").value;
-    const senha = document.getElementById("senha").value;
-
+document.addEventListener("DOMContentLoaded", function() {
+  async function login() {
+    const email = document.getElementById("email").value.trim();
+    const senha = document.getElementById("senha").value.trim();
     const status = document.getElementById("status");
-    if(status) status.innerText = "Entrando...";
+    status.innerText = "Entrando...";
 
-    fetch("/api/auth/login", {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({email, senha})
-    })
-    .then(r=>r.json())
-    .then(data=>{
-      if(!data.ok){
-        if(status) status.innerText = "Erro login";
+    try {
+      const r = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({ email, senha })
+      });
+      const d = await r.json();
+      if (!r.ok || !d.ok) {
+        status.innerText = d.erro || "Erro login";
         return;
       }
 
-      localStorage.setItem("rio_token", data.token);
-      localStorage.setItem("usuario", JSON.stringify(data.usuario));
-
+      localStorage.setItem("rio_token", d.token);
+      localStorage.setItem("usuario", JSON.stringify(d.usuario));
       window.location.href = "/app";
-    })
-    .catch(()=>{
-      if(status) status.innerText = "Erro conexão";
-    });
+    } catch (e) {
+      status.innerText = "Erro conexão";
+    }
   }
 
-  const btn = document.getElementById("btnEntrar");
-  if(btn){
-    btn.onclick = login;
-  }
+  document.getElementById("btnEntrar").onclick = login;
+  document.getElementById("senha").addEventListener("keypress", function(e) {
+    if (e.key === "Enter") login();
+  });
 
-  const senha = document.getElementById("senha");
-  if(senha){
-    senha.addEventListener("keypress", function(e){
-      if(e.key === "Enter") login();
-    });
-  }
-
-  // auto login
   const token = localStorage.getItem("rio_token");
-  if(token){
-    window.location.href = "/app";
-  }
-
+  if (token) window.location.href = "/app";
 });
